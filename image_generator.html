@@ -334,6 +334,7 @@
     // API 서버 주소 (로컬 호스트 포트 8000)
     const API_BASE = "http://localhost:8000";
     let isServerHealthy = false;
+    let isGenerating = false; // 이미지 생성 연산 진행 상태 추적
 
     // 슬라이더 바인딩
     const stepsSlider = document.getElementById("steps-slider");
@@ -377,6 +378,15 @@
       const statusDot = document.getElementById("server-status-dot");
       const statusText = document.getElementById("server-status-text");
       
+      // 이미지 생성 중일 때는 헬스체크 패킷 전송을 멈추고 바쁨 상태를 유지합니다.
+      // (FastAPI 싱글스레드 루프 블로킹으로 인한 일시적 응답 지연 오판을 방지합니다.)
+      if (isGenerating) {
+        statusDot.className = "w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse";
+        statusText.textContent = "이미지 생성 연산 중 (서버 바쁨)";
+        statusText.className = "text-amber-400 text-xs";
+        return;
+      }
+      
       try {
         const response = await fetch(`${API_BASE}/healthz`, { method: "GET", signal: AbortSignal.timeout(3000) });
         if (response.ok) {
@@ -408,7 +418,7 @@
         return;
       }
 
-      if (!isServerHealthy) {
+      if (!isServerHealthy && !isGenerating) {
         const confirmRetry = confirm("서버가 오프라인 상태인 것으로 감지됩니다. 로컬 서버(serve.ps1)가 가동 중인지 확인해 주세요. 계속 시도할까요?");
         if (!confirmRetry) return;
       }
@@ -417,6 +427,10 @@
       const stateIdle = document.getElementById("state-idle");
       const stateLoading = document.getElementById("state-loading");
       const stateResult = document.getElementById("state-result");
+
+      // 상태를 생성 중으로 변경
+      isGenerating = true;
+      checkServerHealth();
 
       // UI 상태 로딩으로 변경
       generateBtn.disabled = true;
@@ -487,6 +501,8 @@
       } finally {
         generateBtn.disabled = false;
         generateBtn.classList.remove("opacity-50", "cursor-not-allowed");
+        isGenerating = false;
+        checkServerHealth();
       }
     }
 

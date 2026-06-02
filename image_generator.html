@@ -182,27 +182,29 @@
         <!-- 가이드 스케일 (CFG Guidance) -->
         <div class="space-y-2">
           <div class="flex justify-between items-center text-xs font-bold text-slate-400">
-            <span>프롬프트 준수 강도 (CFG)</span>
+            <span>텍스트 충실도 (말 잘 듣는 정도 / CFG)</span>
             <span id="guidance-val" class="font-outfit text-purple-400 text-sm font-bold">1.0</span>
           </div>
           <input type="range" id="guidance-slider" min="0.0" max="5.0" step="0.1" value="1.0" class="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-purple-500">
           <div class="flex justify-between text-[10px] text-slate-500">
-            <span>창의적 (0.5)</span>
-            <span>기본 (1.0)</span>
-            <span>강함 (5.0)</span>
+            <span>자유로운 상상 (0.5)</span>
+            <span>기본 설정 (1.0)</span>
+            <span>엄격한 지시 (5.0)</span>
           </div>
+          <p class="text-[10px] text-slate-500 leading-normal mt-1">숫자가 높을수록 내가 쓴 설명에 딱 맞춰 그리고, 낮을수록 AI가 더 창의적이고 자유롭게 그립니다.</p>
         </div>
 
         <!-- 시드 번호 (Seed) -->
         <div class="space-y-2">
           <div class="flex justify-between items-center">
-            <label class="text-xs font-bold text-slate-400 block">시드 번호 (Seed)</label>
+            <label class="text-xs font-bold text-slate-400 block">그림 고유 씨앗 번호 (Seed)</label>
             <button onclick="randomizeSeed()" class="text-xs text-purple-400 hover:text-purple-300 font-medium flex items-center gap-1 transition">
               <i data-lucide="dice-5" class="w-3.5 h-3.5"></i>
               랜덤 시드
             </button>
           </div>
           <input type="number" id="seed-input" value="42" class="w-full bg-slate-900 border border-white/10 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-purple-500 transition font-outfit">
+          <p class="text-[10px] text-slate-500 leading-normal mt-1">그림의 고유 번호입니다. 프롬프트 글과 이 번호가 똑같으면 언제나 동일한 그림이 다시 그려집니다.</p>
         </div>
 
         <!-- 고급 옵션 (Tiled VAE / Max Sequence Length) -->
@@ -214,11 +216,11 @@
           <div class="space-y-4 mt-4">
             <!-- Tiled VAE -->
             <div class="flex items-center justify-between">
-              <div>
-                <label class="text-xs font-bold text-slate-300 block">Tiled VAE 사용</label>
-                <span class="text-[10px] text-slate-500">VRAM 사용을 억제하여 OOM을 방지합니다.</span>
+              <div class="pr-2">
+                <label class="text-xs font-bold text-slate-300 block">메모리 절약 모드 (Tiled VAE)</label>
+                <span class="text-[10px] text-slate-500 leading-normal">그림을 작게 쪼개서 단계별로 그리도록 하여 그래픽 카드의 부담(메모리 초과 등)을 덜고 렉을 방지합니다. (권장)</span>
               </div>
-              <label class="relative inline-flex items-center cursor-pointer">
+              <label class="relative inline-flex items-center cursor-pointer shrink-0">
                 <input type="checkbox" id="tiled-vae-checkbox" class="sr-only peer" checked>
                 <div class="w-9 h-5 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-slate-400 after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-purple-600 peer-checked:after:bg-white"></div>
               </label>

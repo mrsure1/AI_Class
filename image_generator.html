@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bonsai Image Studio - 프리미엄 AI 이미지 생성기</title>
+  
+  <!-- 구글 폰트 로드: Outfit & Noto Sans KR -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Noto Sans KR"', '"Outfit"', 'sans-serif'],
+            outfit: ['"Outfit"', 'sans-serif']
+          },
+          colors: {
+            slate: {
+              950: '#0a0e17',
+              900: '#111827',
+              800: '#1f2937',
+              700: '#374151'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  
+  <style>
+    /* 스크롤바 커스텀 */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0a0e17;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1f2937;
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #374151;
+    }
+
+    /* 프리미엄 그라데이션 및 블러 효과 */
+    .glass-panel {
+      background: rgba(17, 24, 39, 0.7);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .neon-border-focus:focus-within {
+      border-color: rgba(139, 92, 246, 0.5);
+      box-shadow: 0 0 15px rgba(139, 92, 246, 0.15);
+    }
+    .grad-btn {
+      background: linear-gradient(135deg, #6366f1, #a855f7);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .grad-btn:hover {
+      background: linear-gradient(135deg, #4f46e5, #9333ea);
+      box-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
+      transform: translateY(-1px);
+    }
+    .grad-text {
+      background: linear-gradient(135deg, #818cf8, #c084fc, #22d3ee);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    
+    /* skeleton 로딩 애니메이션 */
+    .skeleton-wave {
+      background: linear-gradient(90deg, #1f2937 25%, #374151 50%, #1f2937 75%);
+      background-size: 200% 100%;
+      animation: wave 1.5s infinite linear;
+    }
+    @keyframes wave {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col selection:bg-purple-500/30">
+
+  <!-- 네비게이션 헤더 -->
+  <header class="border-b border-white/5 bg-slate-950/80 backdrop-blur-md sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-xl grad-btn flex items-center justify-center shadow-lg shadow-purple-500/20">
+          <i data-lucide="flower" class="w-5 h-5 text-white"></i>
+        </div>
+        <span class="text-xl font-bold font-outfit tracking-wide grad-text">Bonsai Image Studio</span>
+        <span class="text-xs px-2 py-0.5 bg-purple-500/10 text-purple-400 border border-purple-500/20 rounded-full font-medium">Ternary 2-bit</span>
+      </div>
+      <div class="flex items-center gap-4 text-sm">
+        <div class="flex items-center gap-2">
+          <!-- 서버 헬스 표시등 -->
+          <span id="server-status-dot" class="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse"></span>
+          <span id="server-status-text" class="text-slate-400 text-xs">서버 연결 중...</span>
+        </div>
+        <button onclick="checkServerHealth()" class="p-2 hover:bg-slate-800 rounded-lg text-slate-400 hover:text-white transition" title="새로고침">
+          <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- 메인 레이아웃 -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col lg:flex-row gap-8">
+    
+    <!-- 왼쪽 사이드바: 옵션 설정 (Settings Panel) -->
+    <section class="w-full lg:w-[380px] shrink-0 space-y-6">
+      <div class="glass-panel rounded-2xl p-6 space-y-6 shadow-xl">
+        <div class="flex items-center gap-2 border-b border-white/5 pb-4">
+          <i data-lucide="sliders" class="w-5 h-5 text-purple-400"></i>
+          <h2 class="text-lg font-bold">생성 옵션 설정</h2>
+        </div>
+
+        <!-- 모델 백엔드 선택 -->
+        <div class="space-y-2">
+          <label class="text-xs font-bold text-slate-400 block">모델 및 양자화</label>
+          <div class="relative">
+            <select id="backend-select" class="w-full bg-slate-900 border border-white/10 rounded-xl px-3 py-3 text-sm focus:outline-none focus:border-purple-500 transition appearance-none cursor-pointer">
+              <option value="bonsai-ternary-gemlite" selected>Bonsai Ternary (2-bit Gemlite) - 추천</option>
+              <option value="bonsai-binary-gemlite">Bonsai Binary (1-bit Gemlite) - 초경량</option>
+            </select>
+            <div class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
+              <i data-lucide="chevron-down" class="w-4 h-4"></i>
+            </div>
+          </div>
+          <p class="text-[11px] text-slate-500 leading-normal">Ternary는 화질과 정합성이 뛰어나고, Binary는 저용량(0.93GB) 구동에 적합합니다.</p>
+        </div>
+
+        <!-- 이미지 비율 (Aspect Ratio) -->
+        <div class="space-y-2">
+          <label class="text-xs font-bold text-slate-400 block">이미지 비율</label>
+          <div class="grid grid-cols-3 gap-2" id="aspect-ratio-group">
+            <button type="button" data-ratio="1:1" data-w="512" data-h="512" class="ratio-btn py-3 px-2 bg-purple-500/10 border border-purple-500/30 text-purple-300 font-medium rounded-xl text-xs flex flex-col items-center gap-1.5 transition">
+              <div class="w-4 h-4 border-2 border-current rounded-sm"></div>
+              <span>1:1 Square</span>
+            </button>
+            <button type="button" data-ratio="16:9" data-w="1024" data-h="576" class="ratio-btn py-3 px-2 bg-slate-900 border border-white/10 text-slate-300 hover:border-white/20 rounded-xl text-xs flex flex-col items-center gap-1.5 transition">
+              <div class="w-6 h-3.5 border-2 border-current rounded-sm"></div>
+              <span>16:9 Landscape</span>
+            </button>
+            <button type="button" data-ratio="9:16" data-w="576" data-h="1024" class="ratio-btn py-3 px-2 bg-slate-900 border border-white/10 text-slate-300 hover:border-white/20 rounded-xl text-xs flex flex-col items-center gap-1.5 transition">
+              <div class="w-3.5 h-6 border-2 border-current rounded-sm"></div>
+              <span>9:16 Portrait</span>
+            </button>
+          </div>
+          <input type="hidden" id="image-width" value="512">
+          <input type="hidden" id="image-height" value="512">
+        </div>
+
+        <!-- 추론 단계 (Inference Steps) -->
+        <div class="space-y-2">
+          <div class="flex justify-between items-center text-xs font-bold text-slate-400">
+            <span>추론 단계 (Steps)</span>
+            <span id="steps-val" class="font-outfit text-purple-400 text-sm font-bold">4</span>
+          </div>
+          <input type="range" id="steps-slider" min="1" max="20" value="4" class="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-purple-500">
+          <div class="flex justify-between text-[10px] text-slate-500">
+            <span>빠름 (1)</span>
+            <span>추천 (4~8)</span>
+            <span>정밀 (20)</span>
+          </div>
+        </div>
+
+        <!-- 가이드 스케일 (CFG Guidance) -->
+        <div class="space-y-2">
+          <div class="flex justify-between items-center text-xs font-bold text-slate-400">
+            <span>프롬프트 준수 강도 (CFG)</span>
+            <span id="guidance-val" class="font-outfit text-purple-400 text-sm font-bold">1.0</span>
+          </div>
+          <input type="range" id="guidance-slider" min="0.0" max="5.0" step="0.1" value="1.0" class="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-purple-500">
+          <div class="flex justify-between text-[10px] text-slate-500">
+            <span>창의적 (0.5)</span>
+            <span>기본 (1.0)</span>
+            <span>강함 (5.0)</span>
+          </div>
+        </div>
+
+        <!-- 시드 번호 (Seed) -->
+        <div class="space-y-2">
+          <div class="flex justify-between items-center">
+            <label class="text-xs font-bold text-slate-400 block">시드 번호 (Seed)</label>
+            <button onclick="randomizeSeed()" class="text-xs text-purple-400 hover:text-purple-300 font-medium flex items-center gap-1 transition">
+              <i data-lucide="dice-5" class="w-3.5 h-3.5"></i>
+              랜덤 시드
+            </button>
+          </div>
+          <input type="number" id="seed-input" value="42" class="w-full bg-slate-900 border border-white/10 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-purple-500 transition font-outfit">
+        </div>
+
+        <!-- 고급 옵션 (Tiled VAE / Max Sequence Length) -->
+        <details class="group border-t border-white/5 pt-4">
+          <summary class="flex justify-between items-center cursor-pointer list-none text-xs font-bold text-slate-400 group-open:text-purple-400 select-none">
+            <span>고급 옵션 (Advanced)</span>
+            <i data-lucide="chevron-down" class="w-4 h-4 transition-transform group-open:rotate-180"></i>
+          </summary>
+          <div class="space-y-4 mt-4">
+            <!-- Tiled VAE -->
+            <div class="flex items-center justify-between">
+              <div>
+                <label class="text-xs font-bold text-slate-300 block">Tiled VAE 사용</label>
+                <span class="text-[10px] text-slate-500">VRAM 사용을 억제하여 OOM을 방지합니다.</span>
+              </div>
+              <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" id="tiled-vae-checkbox" class="sr-only peer" checked>
+                <div class="w-9 h-5 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-slate-400 after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-purple-600 peer-checked:after:bg-white"></div>
+              </label>
+            </div>
+            <!-- Max Sequence Length -->
+            <div class="space-y-1">
+              <label class="text-xs font-bold text-slate-300 block">텍스트 입력 최대 길이</label>
+              <input type="number" id="max-seq-input" placeholder="기본값 (256)" class="w-full bg-slate-900 border border-white/10 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-purple-500 transition font-outfit">
+            </div>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <!-- 오른쪽: 프롬프트 입력 및 결과 뷰어 -->
+    <section class="flex-1 space-y-6 flex flex-col">
+      <!-- 프롬프트 입력 영역 -->
+      <div class="glass-panel rounded-2xl p-4 flex flex-col md:flex-row gap-4 neon-border-focus transition shadow-lg">
+        <div class="flex-1 relative">
+          <textarea id="prompt-textarea" rows="2" placeholder="만들고 싶은 이미지의 세부 묘사를 한국어 또는 영어로 입력해 주세요...&#10;(예: A beautiful bonsai tree inside a futuristic glass laboratory, soft lighting, 8k)" class="w-full bg-transparent border-0 outline-none text-sm resize-none pr-8 placeholder:text-slate-500" required></textarea>
+        </div>
+        <div class="flex items-center justify-end shrink-0">
+          <button id="generate-btn" onclick="triggerGeneration()" class="w-full md:w-auto grad-btn text-white font-bold text-sm px-6 py-4 rounded-xl flex items-center justify-center gap-2 shadow-lg cursor-pointer">
+            <i data-lucide="sparkles" class="w-4 h-4"></i>
+            <span>이미지 생성</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- 결과 뷰어 캔버스 -->
+      <div class="glass-panel rounded-2xl p-6 flex-1 min-h-[400px] flex flex-col items-center justify-center relative overflow-hidden shadow-xl">
+        
+        <!-- 대기 화면 (Default State) -->
+        <div id="state-idle" class="flex flex-col items-center text-center max-w-sm space-y-4 py-12">
+          <div class="w-16 h-16 rounded-2xl bg-slate-900 border border-white/5 flex items-center justify-center text-slate-500">
+            <i data-lucide="image" class="w-8 h-8"></i>
+          </div>
+          <div>
+            <h3 class="text-base font-bold">생성된 이미지가 여기에 표시됩니다</h3>
+            <p class="text-xs text-slate-500 mt-2 leading-relaxed">상단의 프롬프트를 작성하고 우측의 생성 옵션을 설정한 뒤, 생성 버튼을 눌러보세요.</p>
+          </div>
+        </div>
+
+        <!-- 로딩 상태 (Loading State) -->
+        <div id="state-loading" class="hidden flex-col items-center text-center space-y-6 py-12">
+          <div class="relative w-24 h-24 flex items-center justify-center">
+            <!-- 회전 서클 애니메이션 -->
+            <div class="absolute inset-0 rounded-full border-4 border-purple-500/10 border-t-purple-500 animate-spin"></div>
+            <i data-lucide="wand-2" class="w-8 h-8 text-purple-400 animate-pulse"></i>
+          </div>
+          <div class="space-y-2">
+            <h3 class="text-base font-bold text-purple-300 animate-pulse">AI 이미지 생성 중...</h3>
+            <p class="text-xs text-slate-400">모델 로드 및 연산 중입니다. (처음 실행 시 컴파일 지연이 발생할 수 있습니다)</p>
+          </div>
+          <!-- 로딩 진행 바 -->
+          <div class="w-64 h-1.5 bg-slate-800 rounded-full overflow-hidden">
+            <div class="h-full bg-purple-500 rounded-full skeleton-wave"></div>
+          </div>
+        </div>
+
+        <!-- 이미지 표시 상태 (Result State) -->
+        <div id="state-result" class="hidden w-full h-full flex-col items-center justify-center space-y-4">
+          <!-- 생성된 이미지 캔버스 컨테이너 -->
+          <div class="relative rounded-xl overflow-hidden border border-white/10 max-h-[550px] shadow-2xl flex items-center justify-center">
+            <img id="result-img" src="" alt="생성된 이미지 결과" class="object-contain max-h-[500px] w-auto max-w-full">
+            
+            <!-- 그라데이션 오버레이 배지 -->
+            <span class="absolute top-3 left-3 bg-slate-950/80 backdrop-blur-sm text-[10px] text-slate-300 font-outfit font-medium border border-white/10 px-2.5 py-1 rounded-full">
+              Seed: <span id="badge-seed">42</span>
+            </span>
+          </div>
+
+          <!-- 메타데이터 및 다운로드 툴바 -->
+          <div class="w-full max-w-lg flex flex-col sm:flex-row items-center justify-between gap-4 bg-slate-900/60 border border-white/5 rounded-xl p-3 text-xs text-slate-400">
+            <div class="flex items-center gap-4">
+              <span class="flex items-center gap-1.5">
+                <i data-lucide="clock" class="w-3.5 h-3.5 text-slate-500"></i>
+                소요 시간: <strong class="text-slate-200 font-outfit" id="metadata-time">0.0s</strong>
+              </span>
+              <span class="flex items-center gap-1.5">
+                <i data-lucide="cpu" class="w-3.5 h-3.5 text-slate-500"></i>
+                VRAM: <strong class="text-slate-200 font-outfit" id="metadata-memory">0MB</strong>
+              </span>
+            </div>
+            <div class="flex items-center gap-2">
+              <button onclick="downloadImage()" class="bg-slate-800 hover:bg-slate-700 text-white font-medium px-4 py-2 rounded-lg flex items-center gap-1.5 transition">
+                <i data-lucide="download" class="w-3.5 h-3.5"></i>
+                <span>저장하기</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- 하단 정보 Footer -->
+  <footer class="border-t border-white/5 py-6 bg-slate-950 text-center text-xs text-slate-500">
+    <div class="max-w-7xl mx-auto px-4">
+      <p>Prism ML Bonsai Image 2-bit (Ternary) 모델 전용 로컬 제너레이터</p>
+      <p class="mt-1 text-slate-600">ⓒ 2026 Bonsai Image Studio. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Lucide 아이콘 초기화
+    lucide.createIcons();
+
+    // API 서버 주소 (로컬 호스트 포트 8000)
+    const API_BASE = "http://localhost:8000";
+    let isServerHealthy = false;
+
+    // 슬라이더 바인딩
+    const stepsSlider = document.getElementById("steps-slider");
+    const stepsVal = document.getElementById("steps-val");
+    stepsSlider.addEventListener("input", (e) => stepsVal.textContent = e.target.value);
+
+    const guidanceSlider = document.getElementById("guidance-slider");
+    const guidanceVal = document.getElementById("guidance-val");
+    guidanceSlider.addEventListener("input", (e) => guidanceVal.textContent = parseFloat(e.target.value).toFixed(1));
+
+    // 이미지 비율 버튼 핸들러
+    const ratioButtons = document.querySelectorAll(".ratio-btn");
+    const widthInput = document.getElementById("image-width");
+    const heightInput = document.getElementById("image-height");
+
+    ratioButtons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        // 기존 활성화 해제
+        ratioButtons.forEach(b => {
+          b.classList.remove("bg-purple-500/10", "border-purple-500/30", "text-purple-300");
+          b.classList.add("bg-slate-900", "border-white/10", "text-slate-300");
+        });
+        // 현재 활성화
+        btn.classList.remove("bg-slate-900", "border-white/10", "text-slate-300");
+        btn.classList.add("bg-purple-500/10", "border-purple-500/30", "text-purple-300");
+
+        // 해상도 값 업데이트
+        widthInput.value = btn.dataset.w;
+        heightInput.value = btn.dataset.h;
+      });
+    });
+
+    // 시드 번호 랜덤화 함수
+    function randomizeSeed() {
+      const randomSeed = Math.floor(Math.random() * 999999999);
+      document.getElementById("seed-input").value = randomSeed;
+    }
+
+    // 서버 헬스체크
+    async function checkServerHealth() {
+      const statusDot = document.getElementById("server-status-dot");
+      const statusText = document.getElementById("server-status-text");
+      
+      try {
+        const response = await fetch(`${API_BASE}/healthz`, { method: "GET", signal: AbortSignal.timeout(3000) });
+        if (response.ok) {
+          isServerHealthy = true;
+          statusDot.className = "w-2.5 h-2.5 rounded-full bg-emerald-500";
+          statusText.textContent = "서버 연결 완료 (가동 중)";
+          statusText.className = "text-emerald-400 text-xs";
+        } else {
+          throw new Error("unhealthy");
+        }
+      } catch (err) {
+        isServerHealthy = false;
+        statusDot.className = "w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse";
+        statusText.textContent = "서버 연결 해제 (serve.ps1 실행 확인)";
+        statusText.className = "text-red-400 text-xs";
+      }
+    }
+
+    // 초기 실행 시 헬스체크 수행
+    checkServerHealth();
+    // 10초마다 상태 주기적 업데이트
+    setInterval(checkServerHealth, 10000);
+
+    // 이미지 생성 트리거
+    async function triggerGeneration() {
+      const prompt = document.getElementById("prompt-textarea").value.trim();
+      if (!prompt) {
+        alert("프롬프트를 입력해 주세요.");
+        return;
+      }
+
+      if (!isServerHealthy) {
+        const confirmRetry = confirm("서버가 오프라인 상태인 것으로 감지됩니다. 로컬 서버(serve.ps1)가 가동 중인지 확인해 주세요. 계속 시도할까요?");
+        if (!confirmRetry) return;
+      }
+
+      const generateBtn = document.getElementById("generate-btn");
+      const stateIdle = document.getElementById("state-idle");
+      const stateLoading = document.getElementById("state-loading");
+      const stateResult = document.getElementById("state-result");
+
+      // UI 상태 로딩으로 변경
+      generateBtn.disabled = true;
+      generateBtn.classList.add("opacity-50", "cursor-not-allowed");
+      stateIdle.classList.add("hidden");
+      stateResult.classList.add("hidden");
+      stateLoading.classList.remove("hidden");
+
+      // 옵션 데이터 획득
+      const seed = parseInt(document.getElementById("seed-input").value) || 0;
+      const steps = parseInt(stepsSlider.value) || 4;
+      const guidance = parseFloat(guidanceSlider.value) || 1.0;
+      const backend = document.getElementById("backend-select").value;
+      const width = parseInt(widthInput.value) || 512;
+      const height = parseInt(heightInput.value) || 512;
+      const tiledVae = document.getElementById("tiled-vae-checkbox").checked;
+      
+      const maxSeqVal = document.getElementById("max-seq-input").value;
+      const maxSequenceLength = maxSeqVal ? parseInt(maxSeqVal) : null;
+
+      const payload = {
+        prompt: prompt,
+        seed: seed,
+        steps: steps,
+        guidance: guidance,
+        backend: backend,
+        width: width,
+        height: height,
+        tiled_vae: tiledVae,
+        max_sequence_length: maxSequenceLength
+      };
+
+      try {
+        const response = await fetch(`${API_BASE}/generate`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(payload)
+        });
+
+        if (!response.ok) {
+          const errMsg = await response.text();
+          throw new Error(errMsg || "이미지 생성 실패");
+        }
+
+        const blob = await response.blob();
+        const imgUrl = URL.createObjectURL(blob);
+
+        // 결과 메타데이터 획득 (Response Headers)
+        const wallTime = response.headers.get("X-Wall-Seconds") || "N/A";
+        const peakMemory = response.headers.get("X-Peak-Memory-MB") || "N/A";
+
+        // UI에 결과 로드
+        document.getElementById("result-img").src = imgUrl;
+        document.getElementById("badge-seed").textContent = seed;
+        document.getElementById("metadata-time").textContent = `${parseFloat(wallTime).toFixed(2)}초`;
+        document.getElementById("metadata-memory").textContent = peakMemory !== "N/A" ? `${parseFloat(peakMemory).toFixed(0)}MB` : "N/A";
+
+        stateLoading.classList.add("hidden");
+        stateResult.classList.remove("hidden");
+
+      } catch (err) {
+        console.error(err);
+        alert(`에러 발생: ${err.message}\n로컬 서버 로그를 확인해 주세요.`);
+        stateLoading.classList.add("hidden");
+        stateIdle.classList.remove("hidden");
+      } finally {
+        generateBtn.disabled = false;
+        generateBtn.classList.remove("opacity-50", "cursor-not-allowed");
+      }
+    }
+
+    // 이미지 저장 다운로드
+    function downloadImage() {
+      const img = document.getElementById("result-img");
+      if (!img.src) return;
+
+      const a = document.createElement("a");
+      a.href = img.src;
+      a.download = `bonsai_generated_${document.getElementById("badge-seed").textContent}.png`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+  </script>
+</body>
+</html>

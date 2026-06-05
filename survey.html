@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>참가자 사전 설문 | AI 기초교육</title>
+<meta name="description" content="AI 기초교육 참가자 사전 설문. 선택만 하면 됩니다." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet" />
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: { sans: ['"Noto Sans KR"', 'sans-serif'] },
+        colors: {
+          brand: { 50:'#eef4ff',100:'#dbe6ff',500:'#4f6ef7',600:'#3a55e0',700:'#2c41b8' },
+        },
+      },
+    },
+  };
+</script>
+<style>
+  .chip { transition: all .2s ease; }
+  .chip.selected {
+    border-color: #3a55e0;
+    background: #eef4ff;
+    box-shadow: 0 0 0 2px #3a55e0;
+  }
+  .chip.selected .check { opacity: 1; transform: scale(1); }
+  .check { opacity: 0; transform: scale(.6); transition: all .2s ease; }
+</style>
+</head>
+<body class="font-sans text-slate-800 bg-slate-50 antialiased min-h-screen">
+
+  <header class="sticky top-0 z-40 backdrop-blur bg-white/90 border-b border-slate-100">
+    <div class="max-w-lg mx-auto px-4 h-14 flex items-center justify-between">
+      <a href="index.html" class="text-sm text-slate-500 hover:text-brand-600">← 커리큘럼 보기</a>
+      <span class="font-bold text-sm">참가자 사전 설문</span>
+    </div>
+  </header>
+
+  <main class="max-w-lg mx-auto px-4 py-8 pb-32">
+    <div class="text-center mb-8">
+      <span class="inline-block bg-brand-50 text-brand-700 font-bold text-xs px-3 py-1 rounded-full mb-3">약 1분 소요</span>
+      <h1 class="text-2xl font-black leading-snug">참가자 사전 설문</h1>
+      <p class="text-slate-500 text-sm mt-2 leading-relaxed">
+        맞춤 교육을 위해 몇 가지만 골라주세요.<br />
+        <b>해당되는 항목을 모두</b> 눌러 선택하시면 됩니다.
+      </p>
+    </div>
+
+    <form id="surveyForm" class="space-y-8">
+
+      <!-- 본인 확인 -->
+      <section class="bg-white rounded-2xl p-5 border border-brand-200 shadow-sm">
+        <div class="flex items-start gap-2 mb-4">
+          <span class="shrink-0 w-7 h-7 rounded-lg bg-brand-600 text-white text-sm font-black flex items-center justify-center">✓</span>
+          <div>
+            <h2 class="font-bold text-lg leading-snug">본인 확인</h2>
+            <p class="text-xs text-slate-500 mt-0.5">신청 시 남겨주신 이름·연락처를 입력해 주세요</p>
+          </div>
+        </div>
+        <div class="space-y-3">
+          <div>
+            <label for="userName" class="block text-sm font-bold mb-1.5">이름</label>
+            <input type="text" id="userName" name="userName" autocomplete="name" placeholder="예) 홍길동" class="w-full p-4 rounded-xl border-2 border-slate-200 text-sm focus:outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-100" />
+          </div>
+          <div>
+            <label for="userPhone" class="block text-sm font-bold mb-1.5">연락처</label>
+            <input type="tel" id="userPhone" name="userPhone" autocomplete="tel" inputmode="numeric" placeholder="예) 010-1234-5678" class="w-full p-4 rounded-xl border-2 border-slate-200 text-sm focus:outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-100" />
+          </div>
+        </div>
+      </section>
+
+      <!-- 1. 컴퓨터 사용능력 -->
+      <section class="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm">
+        <div class="flex items-start gap-2 mb-4">
+          <span class="shrink-0 w-7 h-7 rounded-lg bg-brand-600 text-white text-sm font-black flex items-center justify-center">1</span>
+          <div>
+            <h2 class="font-bold text-lg leading-snug">컴퓨터 사용 능력</h2>
+            <p class="text-xs text-brand-600 font-medium mt-0.5">복수 선택 가능</p>
+          </div>
+        </div>
+        <div class="space-y-2.5" data-group="computer">
+          <button type="button" class="chip w-full text-left p-4 rounded-xl border-2 border-slate-200 bg-white flex items-start gap-3" data-value="인터넷 검색, 쇼핑">
+            <span class="check shrink-0 w-6 h-6 rounded-full bg-brand-600 text-white flex items-center justify-center text-sm mt-0.5">✓</span>
+            <span class="text-sm leading-relaxed"><b>①</b> 인터넷 검색, 쇼핑</span>
+          </button>
+          <button type="button" class="chip w-full text-left p-4 rounded-xl border-2 border-slate-200 bg-white flex items-start gap-3" data-value="문서작성 가능(워드, 엑셀, 파워포인트)">
+            <span class="check shrink-0 w-6 h-6 rounded-full bg-brand-600 text-white flex items-center justify-center text-sm mt-0.5">✓</span>
+            <span class="text-sm leading-relaxed"><b>②</b> 문서작성 가능 (워드, 엑셀, 파워포인트)</span>
+          </button>
+          <button type="button" class="chip w-full text-left p-4 rounded-xl border-2 border-slate-200 bg-white flex items-start gap-3" data-value="게임만 가능">
+            <span class="check shrink-0 w-6 h-6 rounded-full bg-brand-600 text-white flex items-center justify-center text-sm mt-0.5">✓</span>
+            <span class="text-sm leading-relaxed"><b>③</b> 게임만 가능</span>
+          </button>
+          <button type="button" class="chip w-full text-left p-4 rounded-xl border-2 border-slate-200 bg-white flex items-start gap-3" data-value="간단한 프로그램 사용할 수 있음">
+            <span class="check shrink-0 w-6 h-6 rounded-full bg-brand-600 text-white flex items-center justify-center text-sm mt-0.5">✓</span>
+            <span class="text-sm leading-relaxed"><b>④</b> 간단한 프로그램 사용할 수 있음</span>
+          </button>
+          <button type="button" class="chip w-full text-left p-4 rounded-xl border-2 border-slate-200 bg-white flex items-start gap-3" data-value="전문적인 프로그램 사용가능(포토샵, 영상편집툴)">
+            <span class="check shrink-0 w-6 h-6 rounded-full bg-brand-600 text-white flex items-center justify-center text-sm mt-0.5">✓</span>
+            <span class="text-sm leading-relaxed"><b>⑤</b> 전문적인 프로그램 사용 가능 (포토샵, 영상편집툴)</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- 2. AI 경험 -->
+      <section class="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm">
+        <div class="flex items-start gap-2 mb-4">
+          <span class="shrink-0 w-7 h-7 rounded-lg bg-brand-600 text-white text-sm font-black flex items-center justify-center">2</span>
+          <div>
+            <h2 class="font-bold text-lg leading-snug">AI 경험 정도</h2>
+            <p class="text-xs text-brand-600 font-medium mt-0.5">복수 선택 가능 · 해당 없으면 선택 안 하셔도 됩니다</p>
+          </div>
+        </div>
+        <div class="space-y-2.5" data-group="ai">
+          <button type="button" class="chip w-full text-left p-4 rounded-xl border-2 border-slate-200 bg-white flex items-start gap-3" data-value="ChatGPT, Gemini등으로 대화 해봤다">
+            <span class="check shrink-0 w-6 h-6 rounded-full bg-brand-600 text-white flex items-center justify-center text-sm mt-0.5">✓</span>
+            <span class="text-sm leading-relaxed"><b>①</b> ChatGPT, Gemini 등으로 대화해 봤다</span>
+          </button>
+          <button type="button" class="chip w-full text-left p-4 rounded-xl border-2 border-slate-200 bg-white flex items-start gap-3" data-value="생성형 AI로 영상, 음악을 만들어봤다">
+            <span class="check shrink-0 w-6 h-6 rounded-full bg-brand-600 text-white flex items-center justify-center text-sm mt-0.5">✓</span>
+            <span class="text-sm leading-relaxed"><b>②</b> 생성형 AI로 영상, 음악을 만들어 봤다</span>
+          </button>
+          <button type="button" class="chip w-full text-left p-4 rounded-xl border-2 border-slate-200 bg-white flex items-start gap-3" data-value="AI경험 전혀 없음">
+            <span class="check shrink-0 w-6 h-6 rounded-full bg-brand-600 text-white flex items-center justify-center text-sm mt-0.5">✓</span>
+            <span class="text-sm leading-relaxed"><b>③</b> AI 경험 전혀 없음</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- 3. AI로 하고 싶은 것 -->
+      <section class="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm">
+        <div class="flex items-start gap-2 mb-4">
+          <span class="shrink-0 w-7 h-7 rounded-lg bg-brand-600 text-white text-sm font-black flex items-center justify-center">3</span>
+          <div>
+            <h2 class="font-bold text-lg leading-snug">AI로 하고 싶은 것</h2>
+            <p class="text-xs text-brand-600 font-medium mt-0.5">복수 선택 가능</p>
+          </div>
+        </div>
+        <div class="space-y-2.5" data-group="want">
+          <button type="button" class="chip w-full text-left p-4 rounded-xl border-2 border-slate-200 bg-white flex items-start gap-3" data-value="글쓰기·이메일·문서 작성">
+            <span class="check shrink-0 w-6 h-6 rounded-full bg-brand-600 text-white flex items-center justify-center text-sm mt-0.5">✓</span>
+            <span class="text-sm leading-relaxed">글쓰기 · 이메일 · 문서 작성</span>
+          </button>
+          <button type="button" class="chip w-full text-left p-4 rounded-xl border-2 border-slate-200 bg-white flex items-start gap-3" data-value="정보 검색·요약·정리">
+            <span class="check shrink-0 w-6 h-6 rounded-full bg-brand-600 text-white flex items-center justify-center text-sm mt-0.5">✓</span>
+            <span class="text-sm leading-relaxed">정보 검색 · 요약 · 정리</span>
+          </button>
+          <button type="button" class="chip w-full text-left p-4 rounded-xl border-2 border-slate-200 bg-white flex items-start gap-3" data-value="번역·외국어">
+            <span class="check shrink-0 w-6 h-6 rounded-full bg-brand-600 text-white flex items-center justify-center text-sm mt-0.5">✓</span>
+            <span class="text-sm leading-relaxed">번역 · 외국어</span>
+          </button>
+          <button type="button" class="chip w-full text-left p-4 rounded-xl border-2 border-slate-200 bg-white flex items-start gap-3" data-value="이미지·그림 만들기">
+            <span class="check shrink-0 w-6 h-6 rounded-full bg-brand-600 text-white flex items-center justify-center text-sm mt-0.5">✓</span>
+            <span class="text-sm leading-relaxed">이미지 · 그림 만들기</span>
+          </button>
+          <button type="button" class="chip w-full text-left p-4 rounded-xl border-2 border-slate-200 bg-white flex items-start gap-3" data-value="업무·공부 시간 줄이기">
+            <span class="check shrink-0 w-6 h-6 rounded-full bg-brand-600 text-white flex items-center justify-center text-sm mt-0.5">✓</span>
+            <span class="text-sm leading-relaxed">업무 · 공부 시간 줄이기</span>
+          </button>
+          <button type="button" id="otherChip" class="chip w-full text-left p-4 rounded-xl border-2 border-slate-200 bg-white flex items-start gap-3" data-value="기타">
+            <span class="check shrink-0 w-6 h-6 rounded-full bg-brand-600 text-white flex items-center justify-center text-sm mt-0.5">✓</span>
+            <span class="text-sm leading-relaxed">기타 (직접 입력)</span>
+          </button>
+        </div>
+        <div id="otherBox" class="hidden mt-3">
+          <textarea id="otherText" rows="3" maxlength="200" placeholder="하고 싶은 것을 자유롭게 적어주세요" class="w-full p-4 rounded-xl border-2 border-slate-200 text-sm resize-none focus:outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-100"></textarea>
+        </div>
+      </section>
+
+      <!-- 4. 기기 소유 -->
+      <section class="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm">
+        <div class="flex items-start gap-2 mb-4">
+          <span class="shrink-0 w-7 h-7 rounded-lg bg-brand-600 text-white text-sm font-black flex items-center justify-center">4</span>
+          <div>
+            <h2 class="font-bold text-lg leading-snug">보유 기기</h2>
+            <p class="text-xs text-brand-600 font-medium mt-0.5">복수 선택 가능</p>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-2.5" data-group="device">
+          <button type="button" class="chip p-4 rounded-xl border-2 border-slate-200 bg-white flex flex-col items-center gap-2" data-value="스마트폰">
+            <span class="text-2xl">📱</span>
+            <span class="check w-6 h-6 rounded-full bg-brand-600 text-white flex items-center justify-center text-sm">✓</span>
+            <span class="text-sm font-bold">스마트폰</span>
+          </button>
+          <button type="button" class="chip p-4 rounded-xl border-2 border-slate-200 bg-white flex flex-col items-center gap-2" data-value="노트북">
+            <span class="text-2xl">💻</span>
+            <span class="check w-6 h-6 rounded-full bg-brand-600 text-white flex items-center justify-center text-sm">✓</span>
+            <span class="text-sm font-bold">노트북</span>
+          </button>
+          <button type="button" class="chip p-4 rounded-xl border-2 border-slate-200 bg-white flex flex-col items-center gap-2" data-value="탭">
+            <span class="text-2xl">📟</span>
+            <span class="check w-6 h-6 rounded-full bg-brand-600 text-white flex items-center justify-center text-sm">✓</span>
+            <span class="text-sm font-bold">탭</span>
+          </button>
+          <button type="button" class="chip p-4 rounded-xl border-2 border-slate-200 bg-white flex flex-col items-center gap-2" data-value="아이패드">
+            <span class="text-2xl">🍎</span>
+            <span class="check w-6 h-6 rounded-full bg-brand-600 text-white flex items-center justify-center text-sm">✓</span>
+            <span class="text-sm font-bold">아이패드</span>
+          </button>
+        </div>
+      </section>
+
+      <p id="errorMsg" class="hidden text-center text-sm text-red-500 font-medium"></p>
+
+      <button type="submit" id="submitBtn" class="w-full bg-brand-600 hover:bg-brand-700 active:scale-[.98] text-white font-bold text-lg py-4 rounded-2xl shadow-lg shadow-brand-500/30 transition">
+        선택 완료 · 제출하기
+      </button>
+    </form>
+  </main>
+
+  <!-- 완료 모달 -->
+  <div id="doneModal" class="hidden fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4 bg-black/40">
+    <div class="bg-white rounded-2xl p-6 max-w-sm w-full text-center shadow-2xl">
+      <div class="text-5xl mb-3">✅</div>
+      <h3 class="text-xl font-black">선택 완료!</h3>
+      <p id="doneDesc" class="text-slate-500 text-sm mt-2 leading-relaxed"></p>
+      <button type="button" id="closeModal" class="mt-6 w-full bg-brand-600 text-white font-bold py-3 rounded-xl">확인</button>
+    </div>
+  </div>
+
+  <script>
+    // Apps Script 웹앱 배포 후 URL 입력 (구글시트-설문-연동.md 참고)
+    const SHEETS_URL = ''; // 배포 후 웹앱 URL 입력 (구글시트-설문-연동.md)
+
+    const otherChip = document.getElementById('otherChip');
+    const otherBox = document.getElementById('otherBox');
+    const otherText = document.getElementById('otherText');
+
+    document.querySelectorAll('[data-group]').forEach((group) => {
+      group.querySelectorAll('.chip').forEach((chip) => {
+        chip.addEventListener('click', () => {
+          chip.classList.toggle('selected');
+          if (chip === otherChip) {
+            otherBox.classList.toggle('hidden', !chip.classList.contains('selected'));
+            if (!chip.classList.contains('selected')) otherText.value = '';
+          }
+        });
+      });
+    });
+
+    function getSelected(groupName) {
+      const group = document.querySelector(`[data-group="${groupName}"]`);
+      return [...group.querySelectorAll('.chip.selected')].map((c) => c.dataset.value);
+    }
+
+    function buildSummary() {
+      const computer = getSelected('computer');
+      const ai = getSelected('ai');
+      const want = getSelected('want').filter((v) => v !== '기타');
+      const devices = getSelected('device');
+      const other = otherChip.classList.contains('selected') ? otherText.value.trim() : '';
+
+      const lines = [
+        '[AI기초교육 사전설문]',
+        `1.컴퓨터: ${computer.length ? computer.join(', ') : '미선택'}`,
+        `2.AI경험: ${ai.length ? ai.join(', ') : '없음'}`,
+        `3.하고싶은것: ${want.length ? want.join(', ') : ''}${other ? (want.length ? ', ' : '') + '기타-' + other : ''}`,
+        `4.보유기기: ${devices.length ? devices.join(', ') : '미선택'}`,
+      ];
+      return { computer, ai, want, devices, other, text: lines.join('\n') };
+    }
+
+    function normalizePhone(value) {
+      return String(value || '').replace(/[^0-9]/g, '');
+    }
+
+    function validate(data) {
+      const name = document.getElementById('userName').value.trim();
+      const phone = normalizePhone(document.getElementById('userPhone').value);
+      if (!name) return '이름을 입력해 주세요.';
+      if (!phone || phone.length < 10) return '연락처를 올바르게 입력해 주세요.';
+      if (!data.computer.length) return '1번 컴퓨터 사용 능력을 하나 이상 선택해 주세요.';
+      if (!data.want.length && !data.other) return '3번 AI로 하고 싶은 것을 하나 이상 선택해 주세요.';
+      if (otherChip.classList.contains('selected') && !data.other) return '기타를 선택하셨다면 내용을 적어 주세요.';
+      if (!data.devices.length) return '4번 보유 기기를 하나 이상 선택해 주세요.';
+      if (!SHEETS_URL) {
+        return '구글 시트 연동 URL이 설정되지 않았습니다. 담당자에게 문의해 주세요.';
+      }
+      return '';
+    }
+
+    async function submitToSheets(payload) {
+      const response = await fetch(SHEETS_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(payload),
+      });
+      return response.json();
+    }
+
+    function showDoneModal(message) {
+      document.getElementById('doneDesc').innerHTML = message;
+      document.getElementById('copyBtn').classList.add('hidden');
+      document.getElementById('doneModal').classList.remove('hidden');
+    }
+
+    function prefillFromUrl() {
+      const params = new URLSearchParams(window.location.search);
+      const name = params.get('name') || params.get('nm') || '';
+      const phone = params.get('phone') || params.get('p') || '';
+      if (name) document.getElementById('userName').value = decodeURIComponent(name);
+      if (phone) document.getElementById('userPhone').value = decodeURIComponent(phone);
+    }
+
+    document.getElementById('surveyForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const data = buildSummary();
+      const err = validate(data);
+      const errorMsg = document.getElementById('errorMsg');
+      if (err) {
+        errorMsg.textContent = err;
+        errorMsg.classList.remove('hidden');
+        errorMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+      }
+      errorMsg.classList.add('hidden');
+
+      const btn = document.getElementById('submitBtn');
+      btn.disabled = true;
+      btn.textContent = '제출 중...';
+
+      const payload = {
+        name: document.getElementById('userName').value.trim(),
+        phone: document.getElementById('userPhone').value.trim(),
+        computer: data.computer.join(' | '),
+        aiExperience: data.ai.join(' | ') || '없음',
+        wants: data.want.join(' | '),
+        otherWant: data.other,
+        devices: data.devices.join(' | '),
+      };
+
+      try {
+        const result = await submitToSheets(payload);
+        if (result.ok) {
+          showDoneModal('설문이 정상적으로 제출되었습니다.<br />소중한 의견 감사합니다!');
+        } else {
+          errorMsg.textContent = result.message || '제출에 실패했습니다. 다시 시도해 주세요.';
+          errorMsg.classList.remove('hidden');
+          errorMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      } catch {
+        errorMsg.textContent = '네트워크 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.';
+        errorMsg.classList.remove('hidden');
+      }
+
+      btn.disabled = false;
+      btn.textContent = '선택 완료 · 제출하기';
+    });
+
+    document.getElementById('closeModal').addEventListener('click', () => {
+      document.getElementById('doneModal').classList.add('hidden');
+    });
+
+    prefillFromUrl();
+  </script>
+</body>
+</html>

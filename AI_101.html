@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex, nofollow" />
+<title>AI 101 실습 워크북 | ChatGPT · Gemini</title>
+<meta name="description" content="시니어를 위한 AI 실습 워크북. 강사와 함께 화면 보며 따라하기." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet" />
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: { sans: ['"Noto Sans KR"', 'sans-serif'] },
+        colors: {
+          brand: { 50:'#eef4ff',100:'#dbe6ff',500:'#4f6ef7',600:'#3a55e0',700:'#2c41b8' },
+        },
+      },
+    },
+  };
+</script>
+<style>
+  html { scroll-behavior: smooth; }
+  .prompt-text { font-size: 0.95rem; line-height: 1.65; word-break: keep-all; }
+  .step-num { width: 2rem; height: 2rem; }
+  @media (min-width: 640px) { .step-num { width: 2.5rem; height: 2.5rem; font-size: 1.1rem; } }
+</style>
+</head>
+<body class="font-sans text-slate-800 bg-slate-50 antialiased text-base sm:text-lg">
+
+  <header class="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-slate-200 shadow-sm">
+    <div class="max-w-3xl mx-auto px-4 py-3">
+      <div class="flex items-center justify-between gap-2">
+        <a href="index.html" class="text-sm text-slate-500 shrink-0">← 홈</a>
+        <h1 class="font-black text-base sm:text-lg text-center flex-1">AI 101 실습 워크북</h1>
+        <span class="text-xs font-bold text-brand-600 bg-brand-50 px-2 py-1 rounded-full shrink-0">함께 실습</span>
+      </div>
+      <nav class="mt-2 flex gap-1 overflow-x-auto text-xs sm:text-sm pb-0.5 scrollbar-hide">
+        <a href="#start" class="shrink-0 px-3 py-1.5 rounded-full bg-slate-100 font-bold">시작</a>
+        <a href="#day1" class="shrink-0 px-3 py-1.5 rounded-full bg-slate-100 font-bold">1일차</a>
+        <a href="#compare" class="shrink-0 px-3 py-1.5 rounded-full bg-slate-100 font-bold">질문비교</a>
+        <a href="#day2" class="shrink-0 px-3 py-1.5 rounded-full bg-slate-100 font-bold">2일차</a>
+        <a href="#samples" class="shrink-0 px-3 py-1.5 rounded-full bg-slate-100 font-bold">샘플사진</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="max-w-3xl mx-auto px-4 py-6 pb-24 space-y-10">
+
+    <!-- 시작 -->
+    <section id="start" class="bg-gradient-to-br from-brand-600 to-purple-600 text-white rounded-2xl p-6 sm:p-8 shadow-lg">
+      <p class="text-brand-100 text-sm font-bold">ChatGPT · Gemini · 총 4시간(2일)</p>
+      <h2 class="text-2xl sm:text-3xl font-black mt-1 leading-snug">강사님과 함께<br />따라 하는 실습 워크북</h2>
+      <p class="mt-4 text-brand-50 text-sm sm:text-base leading-relaxed opacity-95">
+        아래 <b>파란 [복사]</b> 버튼을 누른 뒤<br />
+        ChatGPT 또는 Gemini에 붙여넣기 하세요.
+      </p>
+      <ol class="mt-5 space-y-2 text-sm sm:text-base">
+        <li class="flex gap-3 items-start"><span class="step-num shrink-0 rounded-full bg-white/20 flex items-center justify-center font-black text-sm">1</span><span><b>복사</b> 버튼 누르기</span></li>
+        <li class="flex gap-3 items-start"><span class="step-num shrink-0 rounded-full bg-white/20 flex items-center justify-center font-black text-sm">2</span><span>ChatGPT 또는 Gemini 열고 <b>붙여넣기</b></span></li>
+        <li class="flex gap-3 items-start"><span class="step-num shrink-0 rounded-full bg-white/20 flex items-center justify-center font-black text-sm">3</span><span>결과 확인 · 마음에 안 들면 <b>한 가지씩</b> 다시 요청</span></li>
+      </ol>
+      <div class="mt-5 flex flex-wrap gap-2">
+        <a href="https://chatgpt.com" target="_blank" rel="noopener" class="bg-white text-brand-700 font-bold text-sm px-4 py-2.5 rounded-xl">ChatGPT 열기 ↗</a>
+        <a href="https://gemini.google.com" target="_blank" rel="noopener" class="bg-white/20 border border-white/40 font-bold text-sm px-4 py-2.5 rounded-xl">Gemini 열기 ↗</a>
+      </div>
+    </section>
+
+    <!-- 1일차 -->
+    <section id="day1">
+      <div class="flex items-center gap-3 mb-4">
+        <span class="w-10 h-10 rounded-xl bg-brand-600 text-white font-black flex items-center justify-center">1</span>
+        <div>
+          <h2 class="text-xl sm:text-2xl font-black">1일차 · AI와 대화하기</h2>
+          <p class="text-sm text-slate-500">2시간 · 글쓰기 · 요약 · 번역</p>
+        </div>
+      </div>
+      <div id="day1List" class="space-y-4"></div>
+    </section>
+
+    <!-- 질문 비교 -->
+    <section id="compare">
+      <h2 class="text-xl sm:text-2xl font-black mb-1">좋은 질문 vs 안 좋은 질문</h2>
+      <p class="text-sm text-slate-500 mb-5">같은 주제도 <b>구체적으로</b> 물을수록 답이 좋아집니다.</p>
+      <div id="compareList" class="space-y-5"></div>
+      <div class="mt-4 bg-brand-50 border border-brand-100 rounded-xl p-4 text-sm leading-relaxed">
+        💡 <b>기억하세요:</b> 누가(나이) · 무엇을(목적) · 어떤 형식(길이·표·개수)을 알려주세요.
+      </div>
+    </section>
+
+    <!-- 1일차 실습 계속 -->
+    <section>
+      <h2 class="text-xl font-black mb-4">1일차 실습 이어하기</h2>
+      <div id="day1bList" class="space-y-4"></div>
+    </section>
+
+    <!-- 2일차 -->
+    <section id="day2">
+      <div class="flex items-center gap-3 mb-4">
+        <span class="w-10 h-10 rounded-xl bg-purple-600 text-white font-black flex items-center justify-center">2</span>
+        <div>
+          <h2 class="text-xl sm:text-2xl font-black">2일차 · 이미지 & 사진</h2>
+          <p class="text-sm text-slate-500">2시간 · 그림 만들기 · 사진 교정</p>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-2xl p-5 border border-slate-200 mb-5">
+        <h3 class="font-bold mb-3">이미지 만들기 순서</h3>
+        <ol class="text-sm sm:text-base text-slate-600 space-y-2 list-decimal list-inside">
+          <li>ChatGPT 또는 Gemini 접속</li>
+          <li>아래 프롬프트 <b>복사 → 붙여넣기 → 전송</b></li>
+          <li>글자·색이 마음에 안 들면 "글자 더 크게"처럼 <b>한 가지씩</b> 추가 요청</li>
+        </ol>
+      </div>
+      <div id="day2List" class="space-y-4"></div>
+    </section>
+
+    <!-- 샘플 사진 실습 -->
+    <section id="samples">
+      <h2 class="text-xl sm:text-2xl font-black mb-1">📷 샘플 사진으로 교정 실습</h2>
+      <p class="text-sm text-slate-500 mb-5">아래 사진을 <b>저장</b>한 뒤 ChatGPT·Gemini에 <b>첨부(📎)</b>하고 프롬프트를 붙여넣으세요.</p>
+
+      <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 text-sm mb-6 leading-relaxed">
+        <b>따라하기:</b> 사진 아래 <b>저장</b> → AI 앱에서 사진 첨부 → <b>프롬프트 복사</b> → 전송
+      </div>
+
+      <div id="sampleList" class="space-y-8"></div>
+    </section>
+
+    <!-- 마무리 -->
+    <section class="bg-white rounded-2xl p-6 border border-slate-200">
+      <h2 class="text-xl font-black mb-3">🎓 수업 마무리 실습</h2>
+      <div id="finishList" class="space-y-4"></div>
+    </section>
+
+    <section class="bg-red-50 border border-red-100 rounded-2xl p-5 text-sm">
+      <p class="font-bold text-red-800">⚠️ 꼭 지켜주세요</p>
+      <ul class="mt-2 text-red-900 space-y-1 list-disc list-inside">
+        <li>주민번호 · 계좌번호 · 비밀번호는 AI에 넣지 마세요</li>
+        <li>건강·법률 답은 <b>참고만</b> — 꼭 전문가와 상담하세요</li>
+        <li>사진 교정 시 얼굴이 너무 바뀌면 "자연스럽게" 다시 요청하세요</li>
+      </ul>
+    </section>
+
+  </main>
+
+  <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-base font-bold px-6 py-3 rounded-full shadow-2xl opacity-0 transition-opacity z-50 pointer-events-none">✓ 복사되었습니다</div>
+
+  <script>
+    const samples = [
+      {
+        file: 'samples/sample-dark.jpg',
+        title: '실습 1 · 어두운 실내 사진',
+        desc: '밝기를 자연스럽게 올려 보세요.',
+        prompt: '첨부한 사진을 자연스럽게 밝게 해주세요. 너무 인위적이지 않게, 얼굴은 원본과 비슷하게 유지하고, 전체적으로 선명하게 보정해주세요.',
+      },
+      {
+        file: 'samples/sample-faded.jpg',
+        title: '실습 2 · 바랜 옛날 사진 느낌',
+        desc: '색감 복원·선명도를 높여 보세요.',
+        prompt: '첨부한 오래된 가족사진을 깨끗하게 보정해주세요. 어두운 부분을 밝히고, 색이 바랜 느낌을 자연스럽게 복원해주세요. 얼굴 형태는 바꾸지 마세요.',
+      },
+      {
+        file: 'samples/sample-travel.jpg',
+        title: '실습 3 · 여행 풍경 사진',
+        desc: '하늘과 색감을 보기 좋게.',
+        prompt: '첨부한 여행 사진을 보기 좋게 보정해주세요. 하늘은 맑게, 색감은 따뜻하게, 사람 표정은 자연스럽게 유지해주세요.',
+      },
+      {
+        file: 'samples/sample-group.jpg',
+        title: '실습 4 · 단체 사진',
+        desc: '전체 밝기를 고르게 맞춰 보세요.',
+        prompt: '첨부한 단체 사진 전체가 잘 보이도록 밝기와 대비를 조정해주세요. 한 사람 얼굴만 바꾸지 말고, 전체적으로 균일하게 보정해주세요.',
+      },
+    ];
+
+    const compares = [
+      { topic: '건강·생활', bad: '건강에 좋은것 알려줘', good: '65세가 하루 30분 걷기 운동을 시작하려고 해요. 주의할 점과 좋은 시간대를 표로 5줄 이내로 알려주세요. 너무 어려운 의학 용어는 쓰지 마세요.' },
+      { topic: '가족 메시지', bad: '손주 생일 축하해', good: '초등학교 3학년 손주에게 보낼 생일 축하 카톡 메시지를 3가지 써주세요. 각각 2~3문장, 따뜻하고 다정한 말투, 이모지 1~2개만 넣어주세요.' },
+      { topic: '동호회 공지', bad: '모임 공지 써줘', good: '60대 이상 배드민턴 동호회 1월 정기 모임 공지를 써주세요. 일시: 1월 15일(수) 오후 2시, 장소: ○○체육관. 참가비 5천원. 친근한 말투, 10줄 이내, 맨 아래 참석 여부 회신 요청 문장 포함.' },
+      { topic: '여행', bad: '부산 여행 추천', good: '70대 부부가 걷기 편한 부산 1박2일 여행 코스를 추천해주세요. 대중교통 이용, 하루 2곳 이하, 각 장소마다 휴식 포인트도 알려주세요.' },
+      { topic: '요약', bad: '이거 요약해줘', good: '(긴 글 붙여넣은 뒤) 위 내용을 60대가 이해하기 쉽게 5줄로 요약해주세요. 핵심만, 어려운 단어는 풀어서 설명해주세요.' },
+      { topic: '번역', bad: '영어로 바꿔줘', good: '아래 한국어를 자연스러운 영어로 바꿔주세요. 해외 여행 중 식당에서 쓸 간단한 말이에요. 2문장, 정중한 표현으로: "이 메뉴에 매운 소스가 들어가나요? 매운 건 잘 못 먹어서요."' },
+    ];
+
+    const day1a = [
+      { title: '실습 1 · 건강 생활 팁', prompt: '65세가 매일 아침 30분 걷기를 하려고 합니다. 시작 전 알아두면 좋은 준비물 3가지와 주의사항을 표로 정리해주세요. 쉬운 말로 써주세요.' },
+      { title: '실습 2 · 가족 안부 메시지', prompt: '오랜만에 만나는 성인 자녀에게 보낼 따뜻한 안부 카톡 메시지 3가지를 써주세요. 각 2~3문장, 부담스럽지 않은 말투로.' },
+      { title: '실습 3 · 손주 격려 메시지', prompt: '초등학생 손주가 방학 숙제를 미루고 있어요. 잔소리가 아닌 격려 메시지 2가지를 써주세요. 각 3문장 이내.' },
+      { title: '실습 4 · 동호회 공지 쓰기', prompt: '60대 배드민턴 동호회 2월 정기 모임 공지를 써주세요. 일시 2월 12일(목) 오후2시, 장소 ○○체육관, 참가비 5천원. 10줄 이내, 맨 아래 참석 회신 요청 포함.' },
+      { title: '실습 5 · 기사 요약', prompt: '(뉴스 기사를 복사해 붙여넣은 뒤) 위 기사를 60대가 이해하기 쉽게 5줄로 요약해주세요. 어려운 단어는 풀어쓰고, 핵심만.' },
+    ];
+
+    const day1b = [
+      { title: '실습 6 · 안내문 핵심만 뽑기', prompt: '(긴 안내문을 붙여넣은 뒤) 위 내용에서 날짜, 장소, 준비물, 연락처만 뽑아서 표로 정리해주세요.' },
+      { title: '실습 7 · 여행 영어', prompt: '해외여행 식당에서 쓸 영어 문장으로 바꿔주세요: "이 음식에 땅콩이 들어가나요? 알레르기가 있어서요." 정중하고 짧게.' },
+      { title: '실습 8 · 병원 질문 목록', prompt: '병원 예약 전에 의사에게 물어볼 질문 5가지를 목록으로 만들어주세요. 무릎 통증 진료 예정, 68세 남성.' },
+      { title: '실습 9 · 나만의 질문 템플릿', prompt: '나는 65세이고 동호회 공지와 가족 메시지를 자주 씁니다. 앞으로 자주 쓸 수 있는 AI 질문 템플릿 5개를 만들어주세요. 복붙해서 []만 바꾸면 되게.' },
+      { title: '실습 10 · 오늘 배운 것 정리', prompt: '오늘 배운 내용을 70대 친구에게 설명하듯 5줄로 정리해주세요. ChatGPT와 Gemini를 언제 쓰면 좋은지도 한 줄씩.' },
+    ];
+
+    const day2 = [
+      { title: '실습 11 · 동호회 포스터', prompt: '60대 동호회 배드민턴 대회 포스터 이미지를 만들어주세요. 밝고 경쾌한 분위기, 큰 글씨로 "2026 봄맞이 친선대회", 하단에 날짜·장소 넣을 공간, A4 세로, 인쇄용.' },
+      { title: '실습 12 · 생일 축하 카드', prompt: '친구 생일 축하 카드 이미지를 만들어주세요. 따뜻한 꽃과 케이크, "생일 축하합니다" 한글 큰 글씨, 파스텔톤, 카톡 전송용 정사각형.' },
+      { title: '실습 13 · 새해 인사 카드', prompt: '새해 인사 카드 이미지를 만들어주세요. 2026년, 복 많이 받으세요 문구, 한국적 전통 문양 느낌, 붉은색과 금색, 정사각형.' },
+      { title: '실습 14 · 이미지 수정 요청', prompt: '방금 만든 이미지에서 글자를 더 크고 굵게 해주세요. 배경은 더 밝게, 전체적으로 카톡에 보내기 좋게 만들어주세요.' },
+      { title: '실습 15 · 통합 실습', prompt: '동호회 3월 산행 모임을 준비합니다. ① 단톡 공지문 8줄 ② 포스터용 짧은 슬로건 3개 ③ 60대가 주의할 점 3가지 — 순서대로 만들어주세요.' },
+    ];
+
+    const finish = [
+      { title: '한 달 실천 과제', prompt: '앞으로 한 달 동안 매주 AI로 해볼 수 있는 작은 실천 과제 4개를 제안해주세요. 60대, 이미지와 글쓰기 모두 관심 있음.' },
+      { title: '안전 체크리스트', prompt: '60대가 AI 사용할 때 절대 넣으면 안 되는 개인정보 7가지와, 그 이유를 쉽게 설명해주세요.' },
+    ];
+
+    function toast() {
+      const t = document.getElementById('toast');
+      t.style.opacity = '1';
+      setTimeout(() => { t.style.opacity = '0'; }, 1800);
+    }
+
+    async function copyText(text) {
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      }
+      toast();
+    }
+
+    function makeExerciseCard({ title, prompt, num }) {
+      const el = document.createElement('article');
+      el.className = 'bg-white rounded-2xl border-2 border-slate-100 overflow-hidden shadow-sm';
+      el.innerHTML = `
+        <div class="flex items-center justify-between gap-3 px-4 sm:px-5 py-3 bg-slate-50 border-b border-slate-100">
+          <h3 class="font-bold text-base sm:text-lg">${num ? `<span class="text-brand-600">${num}. </span>` : ''}${title}</h3>
+          <button type="button" class="copy-btn shrink-0 bg-brand-600 hover:bg-brand-700 active:scale-95 text-white font-bold text-sm px-4 py-2.5 rounded-xl transition">복사</button>
+        </div>
+        <div class="prompt-text px-4 sm:px-5 py-4 text-slate-700">${prompt}</div>
+      `;
+      el.querySelector('.copy-btn').onclick = () => copyText(prompt);
+      return el;
+    }
+
+    function renderExercises(list, containerId, startNum = 1) {
+      const el = document.getElementById(containerId);
+      list.forEach((item, i) => el.appendChild(makeExerciseCard({ ...item, num: startNum + i })));
+    }
+
+    // 비교
+    const compareEl = document.getElementById('compareList');
+    compares.forEach((c) => {
+      const block = document.createElement('div');
+      block.className = 'bg-white rounded-2xl border border-slate-200 overflow-hidden';
+      block.innerHTML = `<p class="px-4 py-2.5 bg-slate-100 font-bold text-sm">${c.topic}</p>`;
+      const grid = document.createElement('div');
+      grid.className = 'p-4 space-y-3';
+
+      [['❌ 안 좋은 질문', c.bad, 'bg-red-50 border-red-100 text-red-900'], ['✅ 좋은 질문 (복사해 보세요)', c.good, 'bg-green-50 border-green-100 text-green-900']].forEach(([label, text, cls]) => {
+        const card = document.createElement('div');
+        card.className = `rounded-xl border p-4 ${cls}`;
+        card.innerHTML = `<div class="flex justify-between items-center gap-2 mb-2"><span class="text-sm font-bold">${label}</span><button type="button" class="copy-mini shrink-0 text-xs font-bold bg-white/80 px-3 py-1.5 rounded-lg border">복사</button></div><p class="prompt-text text-sm">${text}</p>`;
+        card.querySelector('.copy-mini').onclick = () => copyText(text);
+        grid.appendChild(card);
+      });
+      block.appendChild(grid);
+      compareEl.appendChild(block);
+    });
+
+    renderExercises(day1a, 'day1List', 1);
+    renderExercises(day1b, 'day1bList', 6);
+    renderExercises(day2, 'day2List', 11);
+    renderExercises(finish, 'finishList');
+
+    // 샘플 사진
+    const sampleEl = document.getElementById('sampleList');
+    samples.forEach((s, i) => {
+      const card = document.createElement('article');
+      card.className = 'bg-white rounded-2xl border-2 border-slate-100 overflow-hidden shadow-sm';
+      card.innerHTML = `
+        <img src="${s.file}" alt="${s.title}" class="w-full aspect-[4/3] object-cover bg-slate-100" loading="lazy" />
+        <div class="p-4 sm:p-5">
+          <h3 class="font-bold text-lg">${s.title}</h3>
+          <p class="text-sm text-slate-500 mt-1">${s.desc}</p>
+          <div class="flex flex-wrap gap-2 mt-4">
+            <a href="${s.file}" download class="inline-flex items-center gap-1 bg-slate-100 hover:bg-slate-200 font-bold text-sm px-4 py-2.5 rounded-xl transition">📥 사진 저장</a>
+            <button type="button" class="copy-photo bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm px-4 py-2.5 rounded-xl transition">프롬프트 복사</button>
+          </div>
+          <p class="prompt-text mt-4 p-3 bg-slate-50 rounded-xl text-sm text-slate-600 border border-slate-100">${s.prompt}</p>
+        </div>
+      `;
+      card.querySelector('.copy-photo').onclick = () => copyText(s.prompt);
+      sampleEl.appendChild(card);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex, nofollow" />
+<title>강사용 실습 워크북 | AI 기초교육 (시니어)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          sans: ['"Noto Sans KR"', 'sans-serif'],
+          mono: ['"JetBrains Mono"', 'monospace'],
+        },
+        colors: {
+          brand: { 50:'#eef4ff',100:'#dbe6ff',500:'#4f6ef7',600:'#3a55e0',700:'#2c41b8' },
+        },
+      },
+    },
+  };
+</script>
+<style>
+  html { scroll-behavior: smooth; }
+  .prompt-box { font-family: "JetBrains Mono", "Noto Sans KR", monospace; }
+  .copied { background: #dcfce7 !important; border-color: #86efac !important; }
+</style>
+</head>
+<body class="font-sans text-slate-800 bg-slate-50 antialiased">
+
+  <!-- 강사용 헤더 -->
+  <header class="sticky top-0 z-50 bg-slate-900 text-white border-b border-slate-700">
+    <div class="max-w-5xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-2">
+      <div>
+        <p class="text-xs text-amber-300 font-bold">🔒 강사용 · 비공개</p>
+        <h1 class="font-black text-lg">시니어 AI 실습 워크북</h1>
+      </div>
+      <nav class="flex flex-wrap gap-1.5 text-xs">
+        <a href="#compare" class="px-2.5 py-1 rounded-full bg-slate-800 hover:bg-slate-700">질문 비교</a>
+        <a href="#prompts" class="px-2.5 py-1 rounded-full bg-slate-800 hover:bg-slate-700">프롬프트 30</a>
+        <a href="#image" class="px-2.5 py-1 rounded-full bg-slate-800 hover:bg-slate-700">이미지</a>
+        <a href="#photo" class="px-2.5 py-1 rounded-full bg-slate-800 hover:bg-slate-700">사진교정</a>
+        <a href="#guide" class="px-2.5 py-1 rounded-full bg-slate-800 hover:bg-slate-700">진행팁</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="max-w-5xl mx-auto px-4 py-8 space-y-12">
+
+    <!-- 개요 -->
+    <section class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
+      <h2 class="text-xl font-black mb-2">교육 개요 (총 4시간 · 2일)</h2>
+      <div class="grid sm:grid-cols-2 gap-4 text-sm">
+        <div class="bg-brand-50 rounded-xl p-4">
+          <p class="font-bold text-brand-700">1일차 2시간</p>
+          <p class="text-slate-600 mt-1">ChatGPT·Gemini 대화 · 좋은 질문법 · 글쓰기·요약·번역</p>
+        </div>
+        <div class="bg-purple-50 rounded-xl p-4">
+          <p class="font-bold text-purple-700">2일차 2시간</p>
+          <p class="text-slate-600 mt-1">이미지 생성 심화 · 사진 교정 · 생활 통합 실습</p>
+        </div>
+      </div>
+      <p class="mt-4 text-sm text-slate-500">대상: 시니어 · 이미지 AI 간단 사용 경험 있음 · 각 프롬프트 옆 <b>[복사]</b> 버튼으로 수업 중 바로 붙여넣기</p>
+    </section>
+
+    <!-- 좋은 질문 vs 나쁜 질문 -->
+    <section id="compare">
+      <h2 class="text-2xl font-black mb-2">① 좋은 질문 vs 안 좋은 질문</h2>
+      <p class="text-sm text-slate-500 mb-6">수업에서 화면에 띄우고 비교 설명용. 핵심: <b>누가·무엇을·어떤 형식으로</b>를 넣을수록 답이 좋아집니다.</p>
+
+      <div class="space-y-4" id="compareList"></div>
+
+      <div class="mt-6 bg-amber-50 border border-amber-200 rounded-xl p-4 text-sm">
+        <p class="font-bold text-amber-900">강사 멘트 요약</p>
+        <p class="mt-1 text-amber-800 leading-relaxed">"AI는 똑똑한데 <b>상황을 모릅니다</b>. 나이, 용도, 길이, 톤을 알려줄수록 내가 원하는 답이 나와요. '건강 알려줘'보다 '65세가 매일 30분 걷기'처럼 구체적으로요."</p>
+      </div>
+    </section>
+
+    <!-- 프롬프트 30개 -->
+    <section id="prompts">
+      <h2 class="text-2xl font-black mb-2">② 복붙 프롬프트 30개</h2>
+      <p class="text-sm text-slate-500 mb-6">ChatGPT·Gemini 공통 사용 가능. 수업 순서대로 번호 매김.</p>
+      <div class="space-y-3" id="promptList"></div>
+    </section>
+
+    <!-- 이미지 생성 -->
+    <section id="image">
+      <h2 class="text-2xl font-black mb-2">③ ChatGPT · Gemini 이미지 생성</h2>
+
+      <div class="grid md:grid-cols-2 gap-4 mb-6">
+        <div class="bg-white rounded-xl p-5 border border-slate-200">
+          <h3 class="font-bold text-brand-700">ChatGPT에서 이미지 만들기</h3>
+          <ol class="mt-3 text-sm text-slate-600 space-y-2 list-decimal list-inside">
+            <li>chatgpt.com 접속 → 로그인</li>
+            <li>새 대화 시작</li>
+            <li>아래 프롬프트 붙여넣기 → 전송</li>
+            <li>마음에 안 들면 "글자 더 크게" "배경 더 밝게" 등 <b>추가 요청</b></li>
+          </ol>
+          <p class="mt-3 text-xs text-slate-400">※ Plus 등 유료 플랜에서 이미지 생성 가능. 수업 전 참가자 플랜 확인.</p>
+        </div>
+        <div class="bg-white rounded-xl p-5 border border-slate-200">
+          <h3 class="font-bold text-purple-700">Gemini에서 이미지 만들기</h3>
+          <ol class="mt-3 text-sm text-slate-600 space-y-2 list-decimal list-inside">
+            <li>gemini.google.com 접속 → 로그인</li>
+            <li>대화창에 프롬프트 입력</li>
+            <li>"이미지 만들어줘"가 포함되면 생성 시작</li>
+            <li>한국어로 수정 요청 가능</li>
+          </ol>
+          <p class="mt-3 text-xs text-slate-400">※ Google 계정만 있으면 사용 가능한 경우가 많음.</p>
+        </div>
+      </div>
+
+      <h3 class="font-bold mb-3">이미지 생성 프롬프트 (복붙용)</h3>
+      <div class="space-y-3" id="imagePromptList"></div>
+    </section>
+
+    <!-- 사진 교정 -->
+    <section id="photo">
+      <h2 class="text-2xl font-black mb-2">④ 기존 사진 교정 · 편집</h2>
+      <p class="text-sm text-slate-500 mb-4">사진을 <b>첨부(업로드)</b>한 뒤 아래 문장을 붙여넣습니다. ChatGPT·Gemini 모두 동일하게 시도.</p>
+
+      <div class="bg-white rounded-xl p-5 border border-slate-200 mb-6">
+        <h3 class="font-bold mb-3">사진 교정 진행 순서 (강사 데모용)</h3>
+        <ol class="text-sm text-slate-600 space-y-2 list-decimal list-inside">
+          <li>교정할 사진 1장 준비 (가족사진·여행사진 등)</li>
+          <li>ChatGPT 또는 Gemini 대화창에서 <b>📎 클립(첨부)</b> 버튼 → 사진 선택</li>
+          <li>아래 프롬프트 중 하나 붙여넣기 → 전송</li>
+          <li>결과 확인 후 "조금 더 밝게" 등 <b>한 가지씩만</b> 추가 요청 (한꺼번에 많이 X)</li>
+          <li>완성 이미지 <b>길게 눌러 저장</b> 또는 다운로드</li>
+        </ol>
+        <p class="mt-3 text-xs text-amber-700 bg-amber-50 rounded-lg p-3">⚠️ 얼굴이 많이 바뀌거나 사실과 다른 합성은 피하도록 안내. "자연스럽게" "원본 느낌 유지"를 프롬프트에 넣으세요.</p>
+      </div>
+
+      <h3 class="font-bold mb-3">사진 교정 프롬프트 (복붙용)</h3>
+      <div class="space-y-3" id="photoPromptList"></div>
+    </section>
+
+    <!-- 강사 진행 팁 -->
+    <section id="guide" class="pb-16">
+      <h2 class="text-2xl font-black mb-4">⑤ 강사 진행 팁</h2>
+      <div class="grid sm:grid-cols-2 gap-4 text-sm">
+        <div class="bg-white rounded-xl p-5 border border-slate-200">
+          <p class="font-bold mb-2">시니어 수업 원칙</p>
+          <ul class="text-slate-600 space-y-1.5 list-disc list-inside">
+            <li>한 번에 메뉴 1~2개만</li>
+            <li>10분마다 "화면 보이세요?" 확인</li>
+            <li>프롬프트는 화면에 크게, 직접 복사해 따라하기</li>
+            <li>실패해도 괜찮다고 격려 → 다시 질문 연습</li>
+          </ul>
+        </div>
+        <div class="bg-white rounded-xl p-5 border border-slate-200">
+          <p class="font-bold mb-2">수업 중 자주 나오는 질문</p>
+          <ul class="text-slate-600 space-y-1.5">
+            <li><b>틀리면?</b> → "참고용, 전문가 확인 필요"</li>
+            <li><b>비용?</b> → 무료/유료 플랜 차이 간단히</li>
+            <li><b>개인정보?</b> → 주민번호·계좌·비번 넣지 말 것</li>
+            <li><b>사진 이상해요</b> → 요청을 하나씩만 수정</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-sm font-bold px-5 py-2.5 rounded-full shadow-xl opacity-0 pointer-events-none transition-opacity z-50">복사됨!</div>
+
+  <script>
+    const compares = [
+      {
+        topic: '건강·생활',
+        bad: '건강 알려줘',
+        good: '65세가 하루 30분 걷기 운동을 시작하려고 해요. 주의할 점과 좋은 시간대를 표로 5줄 이내로 알려주세요. 너무 어려운 의학 용어는 쓰지 마세요.',
+        why: '나이·상황·형식(표)·난이도가 들어가서 실생활에 쓸 답이 나옴',
+      },
+      {
+        topic: '가족 메시지',
+        bad: '손주 생일 축하해',
+        good: '초등학교 3학년 손주에게 보낼 생일 축하 카톡 메시지를 3가지 써주세요. 각각 2~3문장, 따뜻하고 다정한 말투, 이모지 1~2개만 넣어주세요.',
+        why: '대상·길이·말투·개수가 정해져서 바로 보낼 수 있는 문장이 나옴',
+      },
+      {
+        topic: '동호회 공지',
+        bad: '모임 공지 써줘',
+        good: '60대 이상 배드민턴 동호회 1월 정기 모임 공지를 써주세요. 일시: 1월 15일(수) 오후 2시, 장소: ○○체육관. 참가비 5천원. 친근한 말투, 10줄 이내, 맨 아래 참석 여부 회신 요청 문장 포함.',
+        why: '구체 정보가 없으면 AI가 지어냄 → 허위 공지 위험',
+      },
+      {
+        topic: '여행·맛집',
+        bad: '부산 여행 추천',
+        good: '70대 부부가 걷기 편한 부산 1박2일 여행 코스를 추천해주세요. 대중교통 이용, 하루 2곳 이하, 각 장소마다 휴식 포인트와 화장실·엘리베이터 여부도 알려주세요.',
+        why: '연령·체력·이동 수단을 반영한 맞춤 추천',
+      },
+      {
+        topic: '요약',
+        bad: '이거 요약해줘',
+        good: '(긴 글 붙여넣은 뒤) 위 내용을 60대가 이해하기 쉽게 5줄로 요약해주세요. 핵심만, 어려운 단어는 풀어서 설명해주세요.',
+        why: '요약 길이·독자 수준을 지정해야 읽을 수 있는 요약이 됨',
+      },
+      {
+        topic: '번역',
+        bad: '영어로 바꿔줘',
+        good: '아래 한국어를 자연스러운 영어로 바꿔주세요. 해외 여행 중 식당에서 쓸 간단한 말이에요. 2문장, 정중한 표현으로: "이 메뉴에 매운 소스가 들어가나요? 매운 건 잘 못 먹어서요."',
+        why: '상황·길이·톤이 있어야 어색한 직역이 아닌 실용 번역',
+      },
+    ];
+
+    const prompts30 = [
+      { cat: '1일차·생활', n: 1, text: '65세가 매일 아침 30분 걷기를 하려고 합니다. 시작 전 알아두면 좋은 준비물 3가지와 주의사항을 표로 정리해주세요. 쉬운 말로 써주세요.' },
+      { cat: '1일차·생활', n: 2, text: '겨울철 60대가 실내에서 할 수 있는 가벼운 스트레칭 5가지를 순서대로 알려주세요. 각 동작마다 1문장 설명과 사진 없이 따라할 수 있게 써주세요.' },
+      { cat: '1일차·생활', n: 3, text: '혈압이 조금 높은 70대가 식사할 때 피하면 좋은 음식과 대신 먹으면 좋은 음식을 표로 비교해주세요. 의학적 조언이 아닌 일반 생활 참고용임을 맨 위에 적어주세요.' },
+      { cat: '1일차·가족', n: 4, text: '오랜만에 만나는 성인 자녀에게 보낼 따뜻한 안부 카톡 메시지 3가지를 써주세요. 각 2~3문장, 부담스럽지 않은 말투로.' },
+      { cat: '1일차·가족', n: 5, text: '초등학생 손주가 방학 숙제를 미루고 있어요. 잔소리가 아닌 격려 메시지 2가지를 써주세요. 각 3문장 이내.' },
+      { cat: '1일차·가족', n: 6, text: '친구 결혼 50주년 축하 카드에 쓸 짧은 문구 5가지를 써주세요. 각 1~2문장, 정중하고 따뜻하게.' },
+      { cat: '1일차·동호회', n: 7, text: '60대 배드민턴 동호회 2월 정기 모임 공지를 써주세요. 일시 2월 12일(목) 오후2시, 장소 ○○체육관, 참가비 5천원. 10줄 이내, 맨 아래 참석 회신 요청 포함.' },
+      { cat: '1일차·동호회', n: 8, text: '동호회 신규 회원 환영 인사말을 5줄로 써주세요. 친근하고 부담 없는 말투, 첫 모임 때 입으면 좋은 복장 한 줄 추가.' },
+      { cat: '1일차·동호회', n: 9, text: '동호회 회식 장소를 정할 때 단톡방에 올릴 투표 안내 문장을 써주세요. 후보 3곳(한식·중식·분식), 5줄 이내.' },
+      { cat: '1일차·요약', n: 10, text: '(뉴스 기사 붙여넣기) 위 기사를 60대가 이해하기 쉽게 5줄로 요약해주세요. 어려운 단어는 풀어쓰고, 핵심만.' },
+      { cat: '1일차·요약', n: 11, text: '(긴 안내문 붙여넣기) 위 내용에서 날짜, 장소, 준비물, 연락처만 뽑아서 표로 정리해주세요.' },
+      { cat: '1일차·요약', n: 12, text: '유튜브 영상 설명란 글을 붙여넣을게요. 70대가 꼭 알아야 할 핵심 3가지만 bullet로 정리해주세요.' },
+      { cat: '1일차·번역', n: 13, text: '해외여행 식당에서 쓸 영어 문장으로 바꿔주세요: "이 음식에 땅콩이 들어가나요? 알레르기가 있어서요." 정중하고 짧게.' },
+      { cat: '1일차·번역', n: 14, text: '아래 영어 메일을 한국어로 쉽게 풀어서 설명해주세요. (메일 붙여넣기) 어려운 단어는 괄호로 뜻도 적어주세요.' },
+      { cat: '1일차·번역', n: 15, text: '일본 여행에서 "화장실이 어디인가요?"를 일본어로 2가지 표현해주세요. 발음을 한글로도 적어주세요.' },
+      { cat: '1일차·실용', n: 16, text: '병원 예약 전에 의사에게 물어볼 질문 5가지를 목록으로 만들어주세요. 무릎 통증 진료 예정, 68세 남성.' },
+      { cat: '1일차·실용', n: 17, text: '스마트폰 카톡에서 실수로 지운 메시지는 복구가 어렵다는 안내와, 앞으로 대비하는 방법 3가지를 쉽게 설명해주세요.' },
+      { cat: '1일차·실용', n: 18, text: 'AI가 알려준 건강 정보를 믿을 때와 전문의 확인이 필요할 때를 구분하는 체크리스트 5항목을 만들어주세요.' },
+      { cat: '1일차·실용', n: 19, text: '나는 65세이고 동호회 공지와 가족 메시지를 자주 씁니다. 앞으로 자주 쓸 수 있는 AI 질문 템플릿 5개를 만들어주세요. 복붙해서 []만 바꾸면 되게.' },
+      { cat: '1일차·실용', n: 20, text: '오늘 배운 내용을 70대 친구에게 설명하듯 5줄로 정리해주세요. ChatGPT와 Gemini를 언제 쓰면 좋은지도 한 줄씩.' },
+      { cat: '2일차·이미지', n: 21, text: '60대 동호회 배드민턴 대회 포스터 이미지를 만들어주세요. 밝고 경쾌한 분위기, 큰 글씨로 "2026 봄맞이 친선대회", 하단에 날짜·장소 넣을 공간, A4 세로, 인쇄용.' },
+      { cat: '2일차·이미지', n: 22, text: '친구 생일 축하 카드 이미지를 만들어주세요. 따뜻한 꽃과 케이크, "생일 축하합니다" 한글 큰 글씨, 파스텔톤, 카톡 전송용 정사각형.' },
+      { cat: '2일차·이미지', n: 23, text: '새해 인사 카드 이미지를 만들어주세요. 2026년, 복 많이 받으세요 문구, 한국적 전통 문양 느낌, 붉은색과 금색, 정사각형.' },
+      { cat: '2일차·이미지', n: 24, text: '우리 동호회 로고 느낌의 심플한 아이콘을 만들어주세요. 배드민턴 라켓과 공, 원형 배지, 파란색·흰색, 배경 투명 느낌.' },
+      { cat: '2일차·이미지', n: 25, text: '손주에게 보낼 귀여운 고양이 그림 엽서를 만들어주세요. "할머니가 사랑해" 작은 글씨, 따뜻한 느낌, 카톡용.' },
+      { cat: '2일차·통합', n: 26, text: '동호회 3월 산행 모임을 준비합니다. ① 단톡 공지문 8줄 ② 포스터용 짧은 슬로건 3개 ③ 60대가 주의할 점 3가지 — 순서대로 만들어주세요.' },
+      { cat: '2일차·통합', n: 27, text: '봄 꽃구경 나들이 안내를 동호회 회원에게 보냅니다. 공지문 + 날씨/복장 팁 + 간단한 점심 메뉴 추천을 한 번에 정리해주세요.' },
+      { cat: '2일차·안전', n: 28, text: '60대가 AI 사용할 때 절대 넣으면 안 되는 개인정보 7가지와, 그 이유를 쉽게 설명해주세요.' },
+      { cat: '2일차·안전', n: 29, text: '문자로 온 "무료 AI 강의, 계좌 확인 필요" 같은 사기 메시지를 구별하는 체크포인트 5가지를 써주세요.' },
+      { cat: '2일차·마무리', n: 30, text: '앞으로 한 달 동안 매주 AI로 해볼 수 있는 작은 실천 과제 4개를 제안해주세요. 60대, 이미지와 글쓰기 모두 관심 있음.' },
+    ];
+
+    const imagePrompts = [
+      { label: '동호회 포스터 (ChatGPT/Gemini 공통)', text: '60대를 위한 배드민턴 동호회 봄맞이 모임 포스터를 그려주세요. 밝은 봄 색감, 큰 한글 제목 "2026 봄맞이 친선 모임", 날짜와 장소를 넣을 여백, A4 세로 비율, 인쇄해도 선명하게.' },
+      { label: '감사·축하 카드', text: '고마운 친구에게 보낼 감사 카드 그림을 만들어주세요. 따뜻한 꽃다발, "고맙습니다" 한글, 파스텔톤, 정사각형, 카카오톡 전송용.' },
+      { label: 'Gemini용 (명시적)', text: 'Gemini, 아래 내용으로 이미지를 만들어주세요: 70대 부부가 공원에서 산책하는 따뜻한 일러스트, 봄 꽃, 밝은 햇살, 포스터 스타일, 한글 제목 "건강한 봄나들이".' },
+      { label: 'ChatGPT용 (수정 요청 예시)', text: '방금 만든 이미지에서 글자를 더 크고 굵게 해주세요. 배경은 더 밝게, 인물 얼굴은 자연스럽게 유지해주세요.' },
+      { label: '취미·풍경', text: '한국 전통 정원과 티타임 느낌의 평화로운 그림을 만들어주세요. 수채화 스타일, 60대가 좋아할 차분한 색감, 액자에 걸기 좋은 가로형.' },
+    ];
+
+    const photoPrompts = [
+      { label: '기본 밝기·선명도', text: '첨부한 사진을 자연스럽게 밝게 해주세요. 너무 인위적이지 않게, 얼굴은 원본과 비슷하게 유지하고, 전체적으로 선명하게 보정해주세요.' },
+      { label: '흔들림·어두움 보정', text: '첨부한 오래된 가족사진을 깨끗하게 보정해주세요. 어두운 부분을 밝히고, 색이 바랜 느낌을 자연스럽게 복원해주세요. 얼굴 형태는 바꾸지 마세요.' },
+      { label: '배경 정리', text: '첨부한 사진에서 뒤 배경만 단순하게 정리해주세요. 인물은 그대로 두고, 배경을 밝은 단색 또는 공원 느낌으로 자연스럽게 바꿔주세요.' },
+      { label: '여행 사진 보정', text: '첨부한 여행 사진을 보기 좋게 보정해주세요. 하늘은 맑게, 색감은 따뜻하게, 사람 표정은 자연스럽게 유지해주세요.' },
+      { label: '인물 사진 부드럽게', text: '첨부한 인물 사진에서 주름을 과하게 없애지 말고, 피부 톤만 고르고 부드럽게 보정해주세요. 60대의 자연스러운 모습을 유지해주세요.' },
+      { label: '단체 사진', text: '첨부한 단체 사진 전체가 잘 보이도록 밝기와 대비를 조정해주세요. 한 사람 얼굴만 바꾸지 말고, 전체적으로 균일하게 보정해주세요.' },
+      { label: '복원 요청 (옛날 사진)', text: '첨부한 옛날 사진의 scratches와 먼지 느낌을 줄이고, 선명도를 높여주세요. 흑백이면 자연스러운 색감 복원도 시도해주세요. 원본 분위기는 유지.' },
+      { label: '수정 한 가지만 (시니어용)', text: '첨부한 사진에서 딱 한 가지만: 배경을 더 밝게 해주세요. 얼굴이나 옷은 건드리지 마세요.' },
+    ];
+
+    function showToast() {
+      const t = document.getElementById('toast');
+      t.style.opacity = '1';
+      setTimeout(() => { t.style.opacity = '0'; }, 1500);
+    }
+
+    async function copyText(text, btn) {
+      try {
+        await navigator.clipboard.writeText(text);
+        if (btn) {
+          btn.textContent = '복사됨 ✓';
+          btn.classList.add('copied');
+          setTimeout(() => {
+            btn.textContent = '복사';
+            btn.classList.remove('copied');
+          }, 2000);
+        }
+        showToast();
+      } catch {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        showToast();
+      }
+    }
+
+    function makeCopyCard({ label, text, num, cat, variant }) {
+      const wrap = document.createElement('div');
+      wrap.className = 'bg-white rounded-xl border border-slate-200 overflow-hidden';
+      const head = label
+        ? `<div class="flex flex-wrap items-center justify-between gap-2 px-4 py-2.5 bg-slate-50 border-b border-slate-100">
+            <span class="text-sm font-bold text-slate-700">${label}</span>
+            <button type="button" class="copy-btn shrink-0 text-xs font-bold bg-brand-600 hover:bg-brand-700 text-white px-3 py-1.5 rounded-lg transition">복사</button>
+          </div>`
+        : `<div class="flex flex-wrap items-center justify-between gap-2 px-4 py-2.5 bg-slate-50 border-b border-slate-100">
+            <div class="flex items-center gap-2">
+              <span class="w-7 h-7 rounded-lg bg-brand-600 text-white text-xs font-black flex items-center justify-center">${num}</span>
+              <span class="text-xs font-bold text-brand-600">${cat}</span>
+            </div>
+            <button type="button" class="copy-btn shrink-0 text-xs font-bold bg-brand-600 hover:bg-brand-700 text-white px-3 py-1.5 rounded-lg transition">복사</button>
+          </div>`;
+      const bodyClass = variant === 'bad'
+        ? 'bg-red-50 text-red-900 border-red-100'
+        : variant === 'good'
+        ? 'bg-green-50 text-green-900 border-green-100'
+        : 'bg-white text-slate-800';
+      wrap.innerHTML = `${head}<div class="prompt-box ${bodyClass} px-4 py-3 text-sm leading-relaxed whitespace-pre-wrap break-words">${text}</div>`;
+      wrap.querySelector('.copy-btn').addEventListener('click', (e) => copyText(text, e.target));
+      wrap.addEventListener('click', (e) => {
+        if (e.target.classList.contains('copy-btn')) return;
+        copyText(text);
+      });
+      return wrap;
+    }
+
+    // 비교 예시 렌더
+    const compareEl = document.getElementById('compareList');
+    compares.forEach((c) => {
+      const block = document.createElement('div');
+      block.className = 'bg-white rounded-2xl border border-slate-200 overflow-hidden';
+      block.innerHTML = `<div class="px-4 py-3 bg-slate-100 border-b border-slate-200 font-bold text-sm">${c.topic}</div><div class="p-4 grid md:grid-cols-2 gap-3"></div><p class="px-4 pb-4 text-xs text-slate-500">💡 ${c.why}</p>`;
+      const grid = block.querySelector('.grid');
+      const badCard = makeCopyCard({ label: '❌ 안 좋은 질문', text: c.bad, variant: 'bad' });
+      const goodCard = makeCopyCard({ label: '✅ 좋은 질문 (복붙용)', text: c.good, variant: 'good' });
+      badCard.querySelector('.bg-slate-50')?.classList.replace('bg-slate-50', 'bg-red-100');
+      goodCard.querySelector('.bg-slate-50')?.classList.replace('bg-slate-50', 'bg-green-100');
+      grid.appendChild(badCard);
+      grid.appendChild(goodCard);
+      compareEl.appendChild(block);
+    });
+
+    // 30 프롬프트 렌더
+    const promptEl = document.getElementById('promptList');
+    prompts30.forEach((p) => promptEl.appendChild(makeCopyCard(p)));
+
+    // 이미지·사진 프롬프트
+    imagePrompts.forEach((p) => document.getElementById('imagePromptList').appendChild(makeCopyCard(p)));
+    photoPrompts.forEach((p) => document.getElementById('photoPromptList').appendChild(makeCopyCard(p)));
+  </script>
+</body>
+</html>

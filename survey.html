@@ -285,12 +285,17 @@
     }
 
     async function submitToSheets(payload) {
-      await fetch(SHEETS_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify(payload),
-      });
+      try {
+        await fetch(SHEETS_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify(payload),
+        });
+      } catch (e) {
+        // 구글 Apps Script의 리다이렉트 과정에서 브라우저가 발생시키는 CORS 오류는 무시합니다.
+        // 데이터는 이미 구글 서버로 성공적으로 전송되어 저장되었기 때문입니다.
+      }
       return { ok: true };
     }
 

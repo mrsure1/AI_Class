@@ -23,12 +23,22 @@ function normalizePhone(phone) {
 
 function getSheet_() {
   var ss = SpreadsheetApp.openById(SPREADSHEET_ID);
-  return ss.getSheets()[0];
+  var sheet = ss.getSheetByName("설문작성");
+  if (!sheet) {
+    sheet = ss.insertSheet("설문작성");
+  }
+  return sheet;
 }
 
 function ensureSurveyHeaders_(sheet) {
   var lastCol = sheet.getLastColumn();
-  if (lastCol < 1) return;
+  var allHeaders = ['이름', '연락처'].concat(SURVEY_HEADERS);
+  
+  if (lastCol < 1) {
+    sheet.getRange(1, 1, 1, allHeaders.length).setValues([allHeaders]);
+    sheet.getRange(1, 1, 1, allHeaders.length).setFontWeight('bold');
+    return;
+  }
 
   var headers = sheet.getRange(1, 1, 1, lastCol).getValues()[0];
   var headerSet = {};
@@ -36,7 +46,7 @@ function ensureSurveyHeaders_(sheet) {
     headerSet[String(h).trim()] = true;
   });
 
-  var missing = SURVEY_HEADERS.filter(function (h) {
+  var missing = allHeaders.filter(function (h) {
     return !headerSet[h];
   });
 

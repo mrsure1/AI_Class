@@ -285,12 +285,13 @@
     }
 
     async function submitToSheets(payload) {
-      const response = await fetch(SHEETS_URL, {
+      await fetch(SHEETS_URL, {
         method: 'POST',
+        mode: 'no-cors',
         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify(payload),
       });
-      return response.json();
+      return { ok: true };
     }
 
     function showDoneModal(message) {

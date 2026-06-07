@@ -8,7 +8,6 @@
 var SPREADSHEET_ID = '1giowEACfpBA_3fBqyQnsXg4Tojtfw53HGDNlWGVWvrI';
 
 var SURVEY_HEADERS = [
-  '설문작성일시',
   '컴퓨터사용능력',
   'AI경험',
   'AI하고싶은것',
@@ -32,7 +31,7 @@ function getSheet_() {
 
 function ensureSurveyHeaders_(sheet) {
   var lastCol = sheet.getLastColumn();
-  var allHeaders = ['이름', '연락처'].concat(SURVEY_HEADERS);
+  var allHeaders = ['설문작성일시', '이름', '연락처'].concat(SURVEY_HEADERS);
   
   if (lastCol < 1) {
     sheet.getRange(1, 1, 1, allHeaders.length).setValues([allHeaders]);

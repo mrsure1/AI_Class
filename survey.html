@@ -301,7 +301,10 @@
 
     function showDoneModal(message) {
       document.getElementById('doneDesc').innerHTML = message;
-      document.getElementById('copyBtn').classList.add('hidden');
+      const copyBtn = document.getElementById('copyBtn');
+      if (copyBtn) {
+        copyBtn.classList.add('hidden');
+      }
       document.getElementById('doneModal').classList.remove('hidden');
     }
 

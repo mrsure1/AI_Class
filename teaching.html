@@ -53,18 +53,26 @@
 
     <!-- 개요 -->
     <section class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
-      <h2 class="text-xl font-black mb-2">교육 개요 (총 4시간 · 2일)</h2>
+      <h2 class="text-xl font-black mb-2">교육 개요 (총 6시간 · 2일)</h2>
       <div class="grid sm:grid-cols-2 gap-4 text-sm">
         <div class="bg-brand-50 rounded-xl p-4">
-          <p class="font-bold text-brand-700">1일차 2시간</p>
-          <p class="text-slate-600 mt-1">ChatGPT·Gemini 대화 · 좋은 질문법 · 글쓰기·요약·번역</p>
+          <p class="font-bold text-brand-700">📅 1일차 3시간 (글쓰기 & 검색)</p>
+          <ul class="text-slate-600 mt-2 space-y-1 list-disc list-inside">
+            <li><b>1교시 (50분):</b> AI 개념 이해 및 질문 비교법</li>
+            <li><b>2교시 (50분):</b> 스마트폰·노트북 기초 대화 및 실습</li>
+            <li><b>3교시 (50분):</b> 실생활 미션 수행 & 강사 1:1 피드백</li>
+          </ul>
         </div>
         <div class="bg-purple-50 rounded-xl p-4">
-          <p class="font-bold text-purple-700">2일차 2시간</p>
-          <p class="text-slate-600 mt-1">이미지 생성 심화 · 사진 교정 · 생활 통합 실습</p>
+          <p class="font-bold text-purple-700">📅 2일차 3시간 (이미지 & 사진)</p>
+          <ul class="text-slate-600 mt-2 space-y-1 list-disc list-inside">
+            <li><b>1교시 (50분):</b> 이미지 생성 AI 원리 및 예시 소개</li>
+            <li><b>2교시 (50분):</b> 포스터 그리기 및 스마트폰 사진 보정</li>
+            <li><b>3교시 (50분):</b> 종합 작품 만들기 미션 & 안전 수칙</li>
+          </ul>
         </div>
       </div>
-      <p class="mt-4 text-sm text-slate-500">대상: 시니어 · 이미지 AI 간단 사용 경험 있음 · 각 프롬프트 옆 <b>[복사]</b> 버튼으로 수업 중 바로 붙여넣기</p>
+      <p class="mt-4 text-sm text-slate-500">대상: 시니어 · 강사 1인 직강 및 개별 밀착 과외형 실습 · 각 프롬프트 옆 <b>[복사]</b> 버튼으로 붙여넣기 사용</p>
     </section>
 
     <!-- 좋은 질문 vs 나쁜 질문 -->
@@ -172,40 +180,46 @@
     const compares = [
       {
         topic: '건강·생활',
-        bad: '건강 알려줘',
+        bad: '나 요즘 무릎이 좀 쑤시고 아픈데 건강해지는 좋은 운동이랑 생활법 알려줘.',
+        bad_why: '나이, 건강 상태, 답변 형식(표 등)이 빠져 있어 AI가 내 몸에 맞지 않는 너무 뻔하고 평범한 의학 상식만 늘어놓습니다.',
         good: '65세가 하루 30분 걷기 운동을 시작하려고 해요. 주의할 점과 좋은 시간대를 표로 5줄 이내로 알려주세요. 너무 어려운 의학 용어는 쓰지 마세요.',
-        why: '나이·상황·형식(표)·난이도가 들어가서 실생활에 쓸 답이 나옴',
+        good_why: '나이·체력수준·원하는 답변 형태(표)·난이도가 구체적이어서 당장 실천 가능한 맞춤형 조언이 나옵니다.'
       },
       {
         topic: '가족 메시지',
-        bad: '손주 생일 축하해',
+        bad: '내일 우리 손주 생일인데 축하 문자 한 통 보내려고 하니까 한마디 적어줘.',
+        bad_why: '손주의 나이나 말투, 길이 정보가 없어 시니어가 보내기에는 너무 오글거리거나 어색하고 긴 글이 만들어지기 쉽습니다.',
         good: '초등학교 3학년 손주에게 보낼 생일 축하 카톡 메시지를 3가지 써주세요. 각각 2~3문장, 따뜻하고 다정한 말투, 이모지 1~2개만 넣어주세요.',
-        why: '대상·길이·말투·개수가 정해져서 바로 보낼 수 있는 문장이 나옴',
+        good_why: '받는 사람(초3)과 말투, 길이, 이모지 개수까지 정해주어 카톡으로 바로 보내기 적당한 문장이 나옵니다.'
       },
       {
         topic: '동호회 공지',
-        bad: '모임 공지 써줘',
+        bad: '배드민턴 모임 정기 공지글 하나 써줘.',
+        bad_why: '일시, 장소, 회비 등 필수적인 사실 정보가 빠져 있어 AI가 임의로 허구의 일시와 장소를 지어내어 사고가 날 수 있습니다.',
         good: '60대 이상 배드민턴 동호회 1월 정기 모임 공지를 써주세요. 일시: 1월 15일(수) 오후 2시, 장소: ○○체육관. 참가비 5천원. 친근한 말투, 10줄 이내, 맨 아래 참석 여부 회신 요청 문장 포함.',
-        why: '구체 정보가 없으면 AI가 지어냄 → 허위 공지 위험',
+        good_why: '일정·장소·금액의 팩트와 형식을 지정했기 때문에 오류가 없는 정확하고 정돈된 공지문이 완성됩니다.'
       },
       {
         topic: '여행·맛집',
-        bad: '부산 여행 추천',
+        bad: '이번에 부부끼리 기차 타고 부산 여행 가려고 하는데 1박 2일 코스로 괜찮은 데 짜줘.',
+        bad_why: '여행자의 연령과 건강 상태(도보 양 등)가 고려되지 않아 체력적으로 소화하기 힘든 힘든 등산이나 꽉 찬 일정을 추천합니다.',
         good: '70대 부부가 걷기 편한 부산 1박2일 여행 코스를 추천해주세요. 대중교통 이용, 하루 2곳 이하, 각 장소마다 휴식 포인트와 화장실·엘리베이터 여부도 알려주세요.',
-        why: '연령·체력·이동 수단을 반영한 맞춤 추천',
+        good_why: '체력 한계와 이동 수단을 지정하여 70대 어르신도 무리 없이 안전하고 즐겁게 다닐 수 있는 코스가 나옵니다.'
       },
       {
         topic: '요약',
-        bad: '이거 요약해줘',
+        bad: '이 뉴스 기사 내용이 너무 긴데 짧게 줄여줘. (여기에 긴 뉴스글을 붙여넣음)',
+        bad_why: '누구를 위한 요약인지와 분량이 명시되지 않아 어려운 전문 용어가 그대로 남은 길고 어려운 요약문이 생성됩니다.',
         good: '(긴 글 붙여넣은 뒤) 위 내용을 60대가 이해하기 쉽게 5줄로 요약해주세요. 핵심만, 어려운 단어는 풀어서 설명해주세요.',
-        why: '요약 길이·독자 수준을 지정해야 읽을 수 있는 요약이 됨',
+        good_why: '대상 독자의 수준과 원하는 분량(5줄)을 명시하여 초보자도 한눈에 쉽게 이해할 수 있는 요약이 됩니다.'
       },
       {
         topic: '번역',
-        bad: '영어로 바꿔줘',
+        bad: '해외 나가서 식당에서 매운거 못먹는다고 말할 건데 영어로 뭐라고 하면 돼?',
+        bad_why: '어떤 상황에서 어떤 태도(정중하게 등)로 말할지 지시가 없어 교과서에만 나오는 딱딱하고 어색한 표현을 알려줍니다.',
         good: '아래 한국어를 자연스러운 영어로 바꿔주세요. 해외 여행 중 식당에서 쓸 간단한 말이에요. 2문장, 정중한 표현으로: "이 메뉴에 매운 소스가 들어가나요? 매운 건 잘 못 먹어서요."',
-        why: '상황·길이·톤이 있어야 어색한 직역이 아닌 실용 번역',
-      },
+        good_why: '여행 식당이라는 명확한 맥락과 정중한 톤을 지정하여 원어민 점원이 바로 이해할 수 있는 자연스러운 생활 영어가 나옵니다.'
+      }
     ];
 
     const prompts30 = [
@@ -323,12 +337,24 @@
     compares.forEach((c) => {
       const block = document.createElement('div');
       block.className = 'bg-white rounded-2xl border border-slate-200 overflow-hidden';
-      block.innerHTML = `<div class="px-4 py-3 bg-slate-100 border-b border-slate-200 font-bold text-sm">${c.topic}</div><div class="p-4 grid md:grid-cols-2 gap-3"></div><p class="px-4 pb-4 text-xs text-slate-500">💡 ${c.why}</p>`;
+      block.innerHTML = `<div class="px-4 py-3 bg-slate-100 border-b border-slate-200 font-bold text-sm">${c.topic}</div><div class="p-4 grid md:grid-cols-2 gap-3"></div>`;
       const grid = block.querySelector('.grid');
       const badCard = makeCopyCard({ label: '❌ 안 좋은 질문', text: c.bad, variant: 'bad' });
       const goodCard = makeCopyCard({ label: '✅ 좋은 질문 (복붙용)', text: c.good, variant: 'good' });
+      
       badCard.querySelector('.bg-slate-50')?.classList.replace('bg-slate-50', 'bg-red-100');
       goodCard.querySelector('.bg-slate-50')?.classList.replace('bg-slate-50', 'bg-green-100');
+      
+      const badDesc = document.createElement('p');
+      badDesc.className = 'px-4 pb-3 text-xs text-red-700 font-medium bg-red-50/50 pt-2 border-t border-red-100/30';
+      badDesc.innerHTML = `⚠️ <b>왜 안 좋을까요?</b> ${c.bad_why}`;
+      badCard.appendChild(badDesc);
+
+      const goodDesc = document.createElement('p');
+      goodDesc.className = 'px-4 pb-3 text-xs text-green-700 font-medium bg-green-50/50 pt-2 border-t border-green-100/30';
+      goodDesc.innerHTML = `✨ <b>왜 좋을까요?</b> ${c.good_why}`;
+      goodCard.appendChild(goodDesc);
+
       grid.appendChild(badCard);
       grid.appendChild(goodCard);
       compareEl.appendChild(block);

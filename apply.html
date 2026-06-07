@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>간편 신청 | AI 기초교육 과외클래스</title>
+<meta name="description" content="인스타 광고 유입 고객을 위한 AI 기초교육 간편 신청 페이지. 1일 3시간, 총 2일 코스로 1:1 과외처럼 꼼꼼하게 밀착 지도합니다." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet" />
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  // Tailwind 테마 설정 (기존 index/survey 테마 계승 및 강화)
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: { sans: ['"Noto Sans KR"', 'sans-serif'] },
+        colors: {
+          brand: { 50:'#eef4ff',100:'#dbe6ff',500:'#4f6ef7',600:'#3a55e0',700:'#2c41b8' },
+        },
+        keyframes: {
+          floaty: { '0%,100%':{transform:'translateY(0)'}, '50%':{transform:'translateY(-8px)'} },
+        },
+        animation: { floaty: 'floaty 3s ease-in-out infinite' },
+      },
+    },
+  };
+</script>
+<style>
+  html { scroll-behavior: smooth; }
+  .reveal { opacity: 0; transform: translateY(20px); transition: opacity .6s ease, transform .6s ease; }
+  .reveal.show { opacity: 1; transform: none; }
+  .grad-text { background: linear-gradient(90deg,#4f6ef7,#9b5cf6,#ec5b9d); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .chip { transition: all .2s ease; }
+  .chip.selected {
+    border-color: #3a55e0;
+    background: #eef4ff;
+    box-shadow: 0 0 0 2px #3a55e0;
+  }
+  .chip.selected .check { opacity: 1; transform: scale(1); }
+  .check { opacity: 0; transform: scale(.6); transition: all .2s ease; }
+</style>
+</head>
+<body class="font-sans text-slate-800 bg-slate-50 antialiased min-h-screen">
+
+  <!-- 상단 헤더 -->
+  <header class="sticky top-0 z-40 backdrop-blur bg-white/90 border-b border-slate-100">
+    <div class="max-w-lg mx-auto px-4 h-14 flex items-center justify-between">
+      <a href="index.html" class="text-xs text-slate-500 hover:text-brand-600">← 전체 상세정보 보기</a>
+      <span class="font-bold text-sm grad-text">1:1 밀착 AI 과외 클래스</span>
+    </div>
+  </header>
+
+  <main class="max-w-lg mx-auto px-4 py-8 pb-32 space-y-8">
+    
+    <!-- 히어로 섹션 (Instagram 유입 맞춤) -->
+    <section class="text-center space-y-4 pt-4">
+      <span class="inline-block bg-brand-50 text-brand-700 font-black text-xs px-3.5 py-1.5 rounded-full animate-pulse">
+        🔥 한 기수당 딱 8명만 모시는 밀착 클래스
+      </span>
+      <h1 class="text-2xl sm:text-3xl font-black leading-snug reveal show">
+        스마트폰·노트북 하나로 시작!<br />
+        <span class="grad-text">50대도 3시간이면</span><br />
+        AI를 내 비서로 만듭니다
+      </h1>
+      <p class="text-slate-500 text-sm leading-relaxed max-w-sm mx-auto reveal show">
+        지자체 무료 교육의 일방적인 구경하기 수업에 실망하셨나요?<br />
+        강사가 수강생 바로 옆에서 화면을 함께 보며 과외처럼 기초부터 차근차근 짚어드립니다.
+      </p>
+    </section>
+
+    <!-- 핵심 강의 특징 (요약 카드) -->
+    <section class="grid grid-cols-3 gap-2 text-center reveal show">
+      <div class="bg-white rounded-xl p-3 border border-slate-200/80 shadow-sm">
+        <span class="text-xl block mb-1">⏱️</span>
+        <span class="block text-xs text-slate-400">강의 시간</span>
+        <b class="text-xs sm:text-sm">하루 3시간·2일</b>
+      </div>
+      <div class="bg-white rounded-xl p-3 border border-slate-200/80 shadow-sm">
+        <span class="text-xl block mb-1">🧑‍🏫</span>
+        <span class="block text-xs text-slate-400">지도 방식</span>
+        <b class="text-xs sm:text-sm">1인 강사 밀착케어</b>
+      </div>
+      <div class="bg-white rounded-xl p-3 border border-slate-200/80 shadow-sm">
+        <span class="text-xl block mb-1">🎁</span>
+        <span class="block text-xs text-slate-400">특별 혜택</span>
+        <b class="text-xs sm:text-sm">복습 가이드북</b>
+      </div>
+    </section>
+
+    <!-- 간편 신청 폼 -->
+    <section class="bg-white rounded-2xl p-5 border border-brand-200 shadow-md space-y-6 reveal show">
+      <div class="flex items-start gap-2 border-b border-slate-100 pb-3">
+        <span class="shrink-0 w-6 h-6 rounded-full bg-brand-600 text-white text-xs font-black flex items-center justify-center mt-0.5">✏️</span>
+        <div>
+          <h2 class="font-bold text-base leading-snug">AI 과외 클래스 간편 신청</h2>
+          <p class="text-xs text-slate-400 mt-0.5">아래 정보를 입력해 주시면 연락처로 일정을 안내해 드립니다.</p>
+        </div>
+      </div>
+
+      <form id="applyForm" class="space-y-5">
+        <!-- 1. 성함 -->
+        <div>
+          <label for="userName" class="block text-xs font-bold text-slate-700 mb-1.5">이름 (실명)</label>
+          <input type="text" id="userName" name="userName" autocomplete="name" required placeholder="예) 홍길동" class="w-full p-3.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-100" />
+        </div>
+
+        <!-- 2. 연락처 -->
+        <div>
+          <label for="userPhone" class="block text-xs font-bold text-slate-700 mb-1.5">연락처</label>
+          <input type="tel" id="userPhone" name="userPhone" autocomplete="tel" inputmode="numeric" required placeholder="예) 010-1234-5678" class="w-full p-3.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-brand-600 focus:ring-2 focus:ring-brand-100" />
+        </div>
+
+        <!-- 3. 연령대/구분 선택 -->
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1.5">연령대 / 대상 구분</label>
+          <div class="grid grid-cols-2 gap-2" data-group="ageGroup">
+            <button type="button" class="chip p-3 rounded-xl border border-slate-200 bg-white text-xs text-left flex items-center gap-2" data-value="시니어">
+              <span class="check shrink-0 w-4 h-4 rounded-full bg-brand-600 text-white flex items-center justify-center text-[10px]">✓</span>
+              <span>🧑‍🦳 50대 이상 시니어</span>
+            </button>
+            <button type="button" class="chip p-3 rounded-xl border border-slate-200 bg-white text-xs text-left flex items-center gap-2" data-value="직장인">
+              <span class="check shrink-0 w-4 h-4 rounded-full bg-brand-600 text-white flex items-center justify-center text-[10px]">✓</span>
+              <span>💼 직장인 / 1인 창업자</span>
+            </button>
+            <button type="button" class="chip p-3 rounded-xl border border-slate-200 bg-white text-xs text-left flex items-center gap-2" data-value="주부/비전공자">
+              <span class="check shrink-0 w-4 h-4 rounded-full bg-brand-600 text-white flex items-center justify-center text-[10px]">✓</span>
+              <span>🏠 주부 / 컴퓨터 초보</span>
+            </button>
+            <button type="button" class="chip p-3 rounded-xl border border-slate-200 bg-white text-xs text-left flex items-center gap-2" data-value="학생">
+              <span class="check shrink-0 w-4 h-4 rounded-full bg-brand-600 text-white flex items-center justify-center text-[10px]">✓</span>
+              <span>🎓 학생 / 취업준비생</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 4. 관심분야 선택 -->
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1.5">가장 배우고 싶은 AI 분야 (복수 선택 가능)</label>
+          <div class="space-y-2" data-group="interests">
+            <button type="button" class="chip w-full text-left p-3 rounded-xl border border-slate-200 bg-white flex items-center gap-2" data-value="글쓰기/문서작성">
+              <span class="check shrink-0 w-4 h-4 rounded-full bg-brand-600 text-white flex items-center justify-center text-[10px]">✓</span>
+              <span class="text-xs">✍️ 일상 안부 카톡, 공지사항, 안내글 작성</span>
+            </button>
+            <button type="button" class="chip w-full text-left p-3 rounded-xl border border-slate-200 bg-white flex items-center gap-2" data-value="정보검색/요약">
+              <span class="check shrink-0 w-4 h-4 rounded-full bg-brand-600 text-white flex items-center justify-center text-[10px]">✓</span>
+              <span class="text-xs">🔍 건강/여행 정보 똑똑하게 검색하고 핵심만 요약</span>
+            </button>
+            <button type="button" class="chip w-full text-left p-3 rounded-xl border border-slate-200 bg-white flex items-center gap-2" data-value="이미지그리기/사진보정">
+              <span class="check shrink-0 w-4 h-4 rounded-full bg-brand-600 text-white flex items-center justify-center text-[10px]">✓</span>
+              <span class="text-xs">🎨 새해 인사 카드 그리기 및 내 옛날 사진 화질 복원</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 5. 보유기기 -->
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1.5">수업에 가져오실 기기</label>
+          <div class="grid grid-cols-3 gap-2" data-group="devices">
+            <button type="button" class="chip p-2.5 rounded-xl border border-slate-200 bg-white text-xs text-center flex flex-col items-center gap-1" data-value="스마트폰">
+              <span>📱</span>
+              <span class="font-medium">스마트폰</span>
+            </button>
+            <button type="button" class="chip p-2.5 rounded-xl border border-slate-200 bg-white text-xs text-center flex flex-col items-center gap-1" data-value="노트북">
+              <span>💻</span>
+              <span class="font-medium">노트북</span>
+            </button>
+            <button type="button" class="chip p-2.5 rounded-xl border border-slate-200 bg-white text-xs text-center flex flex-col items-center gap-1" data-value="태블릿">
+              <span>📟</span>
+              <span class="font-medium">태블릿</span>
+            </button>
+          </div>
+        </div>
+
+        <p id="errorMsg" class="hidden text-center text-xs text-red-500 font-bold"></p>
+
+        <!-- 신청 버튼 -->
+        <button type="submit" id="submitBtn" class="w-full bg-brand-600 hover:bg-brand-700 active:scale-[.98] text-white font-bold text-base py-3.5 rounded-xl shadow-lg transition">
+          신청 완료하고 안내받기
+        </button>
+      </form>
+    </section>
+
+    <!-- 수업 진행 방식 (커리큘럼 3시간 요약) -->
+    <section class="space-y-4 reveal">
+      <div class="text-center">
+        <h2 class="text-xl font-black">📅 1일 3시간 · 딱 2일 완성 코스</h2>
+        <p class="text-xs text-slate-400 mt-1">이론은 핵심만 짧게, 직접 해보는 실습 위주 구성!</p>
+      </div>
+
+      <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-4">
+        <div>
+          <h3 class="font-bold text-brand-600 text-sm">📅 1일차: 스마트폰·노트북 AI 글쓰기 & 검색</h3>
+          <ul class="text-xs text-slate-600 mt-1.5 space-y-1">
+            <li><b>• 1교시 (50분):</b> AI 가입 및 화면 조작, '진짜 질문법' 비교</li>
+            <li><b>• 2교시 (50분):</b> 안부 문자, 공지사항 작성 및 뉴스 요약 실습</li>
+            <li><b>• 3교시 (50분):</b> 일상 고민 맞춤 해결 및 강사 1:1 직접 피드백</li>
+          </ul>
+        </div>
+        <hr class="border-slate-100" />
+        <div>
+          <h3 class="font-bold text-purple-600 text-sm">📅 2일차: 내 손으로 그리는 AI 이미지 & 사진 보정</h3>
+          <ul class="text-xs text-slate-600 mt-1.5 space-y-1">
+            <li><b>• 1교시 (50분):</b> 카드뉴스·포스터 제작 모범 사례 보기</li>
+            <li><b>• 2교시 (50분):</b> 내 앨범 속 사진 업로드하여 선명화·보정하기</li>
+            <li><b>• 3교시 (50분):</b> 나만의 축하 카드 완성 미션 및 안전 수칙 정리</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- 교육비 및 입금 안내 -->
+    <section class="bg-amber-50 border border-amber-200 rounded-2xl p-5 space-y-3 reveal">
+      <h3 class="font-bold text-amber-900 text-sm flex items-center gap-1.5">💰 교육비 및 예약금 입금 안내</h3>
+      <p class="text-xs text-amber-800 leading-relaxed">
+        본 클래스는 소그룹 집중 지도 유료 과정입니다.<br />
+        참가 확정을 위해 총 10만 원 중 <b>1만 원의 예약금</b>을 받습니다.
+      </p>
+      <div class="grid grid-cols-4 gap-2 text-center text-[10px] text-amber-950 font-bold">
+        <div class="bg-white/80 rounded-lg py-1.5 border border-amber-100"><span class="block text-amber-600 text-[9px] font-medium">일정</span>2일</div>
+        <div class="bg-white/80 rounded-lg py-1.5 border border-amber-100"><span class="block text-amber-600 text-[9px] font-medium">하루</span>3시간</div>
+        <div class="bg-white/80 rounded-lg py-1.5 border border-amber-100"><span class="block text-amber-600 text-[9px] font-medium">수강료</span>10만원</div>
+        <div class="bg-white/80 rounded-lg py-1.5 border border-amber-100"><span class="block text-amber-600 text-[9px] font-medium">예약금</span>1만원</div>
+      </div>
+      <div class="flex flex-wrap items-center justify-between gap-1.5 px-3 py-2 bg-white rounded-lg text-xs">
+        <span><span class="text-slate-400">국민</span> <b>93327258162</b></span>
+        <span><span class="text-slate-400">예금주</span> <b>이진영</b></span>
+      </div>
+      <p class="text-[10px] text-amber-700 text-center">※ 입금 시 신청하시는 분의 함을 적어주세요.</p>
+    </section>
+
+    <!-- 자주 묻는 질문 FAQ -->
+    <section class="space-y-2 reveal">
+      <h3 class="font-bold text-sm text-center">자주 묻는 질문</h3>
+      <details class="group bg-white border border-slate-200 rounded-xl p-4 open:shadow-sm">
+        <summary class="flex justify-between items-center cursor-pointer font-bold text-xs list-none">언제, 어디서 수업이 열리나요?<span class="text-brand-600 group-open:rotate-45 transition">＋</span></summary>
+        <p class="text-slate-500 text-xs mt-2 leading-relaxed">접수 명단에 등록되신 분이 8명 이상 모이면, 수강생분들이 가장 모이기 좋은 지역의 전문 모임 공간을 섭외해 최종 일정(날짜와 시간)을 문자로 먼저 개별 안내해 드립니다.</p>
+      </details>
+      <details class="group bg-white border border-slate-200 rounded-xl p-4 open:shadow-sm">
+        <summary class="flex justify-between items-center cursor-pointer font-bold text-xs list-none">기기나 다루는 법을 몰라도 정말 괜찮나요?<span class="text-brand-600 group-open:rotate-45 transition">＋</span></summary>
+        <p class="text-slate-500 text-xs mt-2 leading-relaxed">네, 강사가 직접 옆에 밀착하여 스마트폰 터치하는 법부터 가르쳐 드립니다. 컴퓨터 자판이 느리시더라도 스마트폰 음성 인식 등을 활용해 쉽게 하실 수 있습니다.</p>
+      </details>
+    </section>
+
+  </main>
+
+  <!-- 완료 안내 모달 -->
+  <div id="doneModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+    <div class="bg-white rounded-2xl p-6 max-w-sm w-full text-center shadow-2xl space-y-4">
+      <div class="text-4xl">✉️</div>
+      <h3 class="text-lg font-black">신청이 성공적으로 접수되었습니다</h3>
+      <p class="text-slate-500 text-xs leading-relaxed">
+        남겨주신 번호로 접수 완료 확인 문자를 발송해 드렸습니다.<br />
+        기수 모집 및 장소 섭외가 완료되는 대로 일정을 가장 먼저 안내해 드리겠습니다.
+      </p>
+      <button type="button" id="closeModal" class="w-full bg-brand-600 text-white font-bold py-3 rounded-xl text-sm transition hover:bg-brand-700">확인</button>
+    </div>
+  </div>
+
+  <script>
+    // 구글 시트 연동 웹앱 URL (설문용과 통일하거나, 접수용 URL 대입 가능)
+    const SHEETS_URL = ''; 
+
+    // 단일 선택 그룹 처리 (연령대)
+    document.querySelectorAll('[data-group="ageGroup"] .chip').forEach((chip) => {
+      chip.addEventListener('click', () => {
+        document.querySelectorAll('[data-group="ageGroup"] .chip').forEach(c => c.classList.remove('selected'));
+        chip.classList.add('selected');
+      });
+    });
+
+    // 다중 선택 그룹 처리 (관심분야, 보유기기)
+    ['interests', 'devices'].forEach((groupName) => {
+      document.querySelectorAll(`[data-group="${groupName}"] .chip`).forEach((chip) => {
+        chip.addEventListener('click', () => {
+          chip.classList.toggle('selected');
+        });
+      });
+    });
+
+    function getSelectedValues(groupName) {
+      return [...document.querySelectorAll(`[data-group="${groupName}"] .chip.selected`)].map(c => c.dataset.value);
+    }
+
+    function normalizePhone(val) {
+      return String(val || '').replace(/[^0-9]/g, '');
+    }
+
+    document.getElementById('applyForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('userName').value.trim();
+      const phone = normalizePhone(document.getElementById('userPhone').value);
+      
+      const ageGroup = getSelectedValues('ageGroup');
+      const interests = getSelectedValues('interests');
+      const devices = getSelectedValues('devices');
+
+      const errorMsg = document.getElementById('errorMsg');
+
+      // 폼 유효성 검사
+      if (!name) {
+        showError('이름을 입력해 주세요.');
+        return;
+      }
+      if (!phone || phone.length < 10) {
+        showError('연락처를 정확히 입력해 주세요.');
+        return;
+      }
+      if (ageGroup.length === 0) {
+        showError('연령대/대상을 하나 선택해 주세요.');
+        return;
+      }
+      if (interests.length === 0) {
+        showError('배우고 싶은 분야를 최소 1개 선택해 주세요.');
+        return;
+      }
+      if (devices.length === 0) {
+        showError('가져오실 기기를 최소 1개 선택해 주세요.');
+        return;
+      }
+      
+      errorMsg.classList.add('hidden');
+
+      const btn = document.getElementById('submitBtn');
+      btn.disabled = true;
+      btn.textContent = '접수하는 중...';
+
+      const payload = {
+        name: name,
+        phone: document.getElementById('userPhone').value.trim(),
+        computer: ageGroup[0], // 시트 컬럼 양식에 대입
+        aiExperience: '인스타광고유입', // 유입 채널 식별용
+        wants: interests.join(' | '),
+        otherWant: '',
+        devices: devices.join(' | ')
+      };
+
+      // 만약 구글 시트 주소가 설정되어 있다면 전송 시도
+      if (SHEETS_URL) {
+        try {
+          const res = await fetch(SHEETS_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify(payload)
+          });
+          const result = await res.json();
+          if (result.ok) {
+            showSuccessModal();
+          } else {
+            showError(result.message || '접수 중 오류가 발생했습니다. 다시 시도해 주세요.');
+          }
+        } catch {
+          showError('네트워크 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.');
+        }
+      } else {
+        // 로컬 테스트용 모달 실행 (구글 시트 URL이 없는 경우 예외 처리)
+        showSuccessModal();
+      }
+
+      btn.disabled = false;
+      btn.textContent = '신청 완료하고 안내받기';
+    });
+
+    function showError(msg) {
+      const errorMsg = document.getElementById('errorMsg');
+      errorMsg.textContent = msg;
+      errorMsg.classList.remove('hidden');
+      errorMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function showSuccessModal() {
+      document.getElementById('doneModal').classList.remove('hidden');
+    }
+
+    document.getElementById('closeModal').addEventListener('click', () => {
+      document.getElementById('doneModal').classList.add('hidden');
+      document.getElementById('applyForm').reset();
+      document.querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
+    });
+
+    // 스크롤 요소 등장 효과
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('show');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+  </script>
+</body>
+</html>

@@ -128,15 +128,18 @@ function doPost(e) {
     var sheet = getSheet_();
     ensureSurveyHeaders_(sheet);
 
+    var colMap = getHeaderIndexMap_(sheet);
     var row = findRowByContact_(sheet, name, phone);
     if (row === -1) {
-      return jsonResponse_({
-        ok: false,
-        message: '접수 목록에서 일치하는 이름·연락처를 찾을 수 없습니다. 신청 시 남기신 정보와 동일하게 입력해 주세요.'
-      });
+      // 일치하는 행이 없으면 새로운 행을 추가합니다.
+      row = sheet.getLastRow() + 1;
+      if (colMap['이름']) {
+        sheet.getRange(row, colMap['이름']).setValue(name);
+      }
+      if (colMap['연락처']) {
+        sheet.getRange(row, colMap['연락처']).setValue(phone);
+      }
     }
-
-    var colMap = getHeaderIndexMap_(sheet);
     var now = Utilities.formatDate(new Date(), 'Asia/Seoul', 'yyyy-MM-dd HH:mm');
 
     sheet.getRange(row, colMap['설문작성일시']).setValue(now);

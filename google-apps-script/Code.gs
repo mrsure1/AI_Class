@@ -169,8 +169,8 @@ function doPost(e) {
                     "🤖 AI 경험: " + String(data.aiExperience || '') + "\n" +
                     "📝 하고 싶은 것: " + String(data.wants || '');
     
-    // (선택) 활성화할 알림 서비스 주석 해제 후 토큰/URL을 기입하세요.
-    // sendTelegramAlert_(alertText);
+    // [알림 발송] Apps Script 스크립트 속성에 TELEGRAM_TOKEN, TELEGRAM_CHAT_ID 등록 시 자동 발송
+    sendTelegramAlert_(alertText);
     // sendDiscordAlert_(alertText.replace(/<[^>]*>/g, '')); // Discord용 HTML 태그 제거
 
     return jsonResponse_({ ok: true, message: '설문이 저장되었습니다.', row: row });
@@ -183,9 +183,9 @@ function doPost(e) {
  * 텔레그램 알림 발송 도우미 함수 (100% 무료, 추천)
  */
 function sendTelegramAlert_(text) {
-  var token = '여기에_텔레그램_봇_토큰_입력'; // 예: '123456789:ABCdef...'
-  var chatId = '여기에_채팅방_ID_입력';       // 예: '987654321'
-  if (token === '여기에_텔레그램_봇_토큰_입력') return;
+  var token = PropertiesService.getScriptProperties().getProperty('TELEGRAM_TOKEN');
+  var chatId = PropertiesService.getScriptProperties().getProperty('TELEGRAM_CHAT_ID');
+  if (!token || !chatId) return;
   
   var url = 'https://api.telegram.org/bot' + token + '/sendMessage';
   var payload = {

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<title>인스타 광고 소재 — 스크린샷용</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@700;900&family=Noto+Sans+KR:wght@500;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #2a2620; padding: 24px; font-family: 'Noto Sans KR', sans-serif; }
+  h1 { color: #ebe8e3; font-size: 14px; margin-bottom: 16px; font-weight: 500; }
+  .grid { display: flex; flex-wrap: wrap; gap: 24px; }
+  .card {
+    width: 405px; height: 405px;
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+    flex-shrink: 0;
+  }
+  .label { color: #d5cfc5; font-size: 11px; margin-top: 8px; text-align: center; width: 405px; }
+
+  /* A안 */
+  .a { background: linear-gradient(165deg, #f6f5f3 0%, #e3ede6 100%); padding: 36px; display: flex; flex-direction: column; justify-content: space-between; }
+  .a .tag { font-size: 11px; font-weight: 700; color: #467a59; letter-spacing: .08em; }
+  .a h2 { font-family: 'Noto Serif KR', serif; font-size: 26px; font-weight: 900; color: #1a1714; line-height: 1.35; margin-top: 12px; }
+  .a h2 em { font-style: normal; color: #467a59; }
+  .a ul { list-style: none; font-size: 13px; color: #3d3830; line-height: 1.9; }
+  .a ul li::before { content: '✓ '; color: #467a59; font-weight: 700; }
+  .a .foot { font-size: 12px; font-weight: 700; color: #467a59; }
+
+  /* B안 */
+  .b { background: #1a1714; padding: 36px; display: flex; flex-direction: column; justify-content: center; text-align: center; }
+  .b .q { font-size: 15px; color: #d5cfc5; margin-bottom: 20px; }
+  .b .price { font-family: 'Noto Serif KR', serif; font-size: 42px; font-weight: 900; color: #fff; }
+  .b .sub { font-size: 14px; color: #c4894a; margin-top: 8px; font-weight: 700; }
+  .b .desc { font-size: 13px; color: #d5cfc5; margin-top: 24px; line-height: 1.7; }
+  .b .phone { margin-top: 28px; font-size: 15px; font-weight: 700; color: #5a8f6e; }
+
+  /* C안 */
+  .c { background: #fff; padding: 32px; display: flex; flex-direction: column; }
+  .c .emoji { font-size: 40px; margin-bottom: 16px; }
+  .c h2 { font-family: 'Noto Serif KR', serif; font-size: 22px; font-weight: 900; color: #1a1714; line-height: 1.45; }
+  .c p { font-size: 13px; color: #3d3830; margin-top: 16px; line-height: 1.65; }
+  .c .pill { display: inline-block; margin-top: auto; background: #e3ede6; color: #3a6349; font-size: 12px; font-weight: 700; padding: 10px 16px; border-radius: 999px; }
+
+  /* E안 */
+  .e { background: #fbfaf8; padding: 28px; display: flex; flex-direction: column; justify-content: space-between; border: 1px solid #e5e0d8; position: relative; }
+  .e .content-wrap { z-index: 2; position: relative; }
+  .e .tag { font-size: 11px; font-weight: 700; color: #467a59; letter-spacing: .08em; display: flex; align-items: center; gap: 4px; }
+  .e .tag::before { content: ''; display: inline-block; width: 6px; height: 6px; background-color: #467a59; border-radius: 50%; }
+  .e h2 { font-family: 'Noto Serif KR', serif; font-size: 23px; font-weight: 900; color: #1a1714; line-height: 1.4; margin-top: 10px; }
+  .e h2 span { color: #c4894a; }
+  .e .desc { font-size: 12.5px; color: #4a453e; line-height: 1.6; margin-top: 12px; }
+  .e .desc strong { color: #1a1714; font-weight: 700; }
+  .e .bg-img { position: absolute; bottom: 8px; right: 8px; width: 150px; height: 150px; opacity: 0.95; z-index: 1; pointer-events: none; border-radius: 8px; overflow: hidden; border: 1px solid #e5e0d8; }
+  .e .bg-img img { width: 100%; height: 100%; object-fit: cover; }
+  .e .badge { align-self: flex-start; background: #e3ede6; color: #3a6349; font-size: 11px; font-weight: 700; padding: 6px 12px; border-radius: 6px; z-index: 2; }
+
+  /* 스토리 9:16 */
+  .story { width: 270px; height: 480px; }
+  .s { background: linear-gradient(180deg, #467a59 0%, #3a6349 100%); padding: 32px 24px; display: flex; flex-direction: column; justify-content: center; height: 100%; color: #fff; text-align: center; }
+  .s h2 { font-family: 'Noto Serif KR', serif; font-size: 22px; font-weight: 900; line-height: 1.4; }
+  .s p { font-size: 13px; margin-top: 20px; opacity: .9; line-height: 1.6; }
+  .s .cta { margin-top: 32px; background: #fff; color: #3a6349; font-weight: 700; font-size: 14px; padding: 14px 24px; border-radius: 12px; display: inline-block; }
+</style>
+</head>
+<body>
+  <h1>브라우저에서 열고 각 카드를 스크린샷 → 인스타 광고 이미지로 사용 (1080px로 업로드 시 2.67배 확대 권장: 브라우저 줌 267%)</h1>
+  <p style="color:#d5cfc5;font-size:12px;margin-bottom:20px;">또는 카드 영역만 캡처 후 Canva에서 1080×1080으로 맞추세요.</p>
+
+  <div class="grid">
+    <div>
+      <div class="card a">
+        <div>
+          <p class="tag">@ai.make.learn</p>
+          <h2>AI 강의,<br /><em>끝까지 AI만</em><br />배우고 싶으신가요?</h2>
+        </div>
+        <ul>
+          <li>소규모 10~20명 실습</li>
+          <li>6시간 hands-on</li>
+          <li>비용 미리 공개 (총 10만원)</li>
+        </ul>
+        <p class="foot">ChatGPT · Gemini 기초교육</p>
+      </div>
+      <p class="label">A안 — 차별화 (피드 1:1)</p>
+    </div>
+
+    <div>
+      <div class="card b">
+        <p class="q">무료 강연에 익숙해지셨나요?</p>
+        <p class="price">총 10만원</p>
+        <p class="sub">2일 · 6시간 실습 · 예약금 1만원</p>
+        <p class="desc">처음부터 끝까지<br />AI 사용법만 가르칩니다</p>
+        <p class="phone">☎ 010-3327-2581</p>
+      </div>
+      <p class="label">B안 — 가격 투명 (피드 1:1)</p>
+    </div>
+
+    <div>
+      <div class="card c">
+        <span class="emoji">🧑‍🦳</span>
+        <h2>손주한테<br />"AI 쓴다"고<br />말하고 싶으세요?</h2>
+        <p>천천히 따라 하는<br />ChatGPT · Gemini 기초교육<br />어르신도 OK · 소규모 수업</p>
+        <span class="pill">@ai.make.learn</span>
+      </div>
+      <p class="label">C안 — 시니어 타겟 (피드 1:1)</p>
+    </div>
+
+    <div>
+      <div class="card e">
+        <div class="content-wrap">
+          <p class="tag">@ai.make.learn · 최신 AI 트렌드</p>
+          <h2>AI가 글자 속<br /><span>&lt;한숨&gt;</span>까지 연기한다고? 😮</h2>
+          <p class="desc">
+            국내 AI 기업 수퍼톤이 만든<br />
+            초경량 음성 AI <strong>'Supertonic 3'</strong> 등장!<br />
+            텍스트에 태그를 넣으면 알아서 웃고 숨 쉬며 말해요.
+          </p>
+        </div>
+        <div class="badge">인터넷 연결 없어도 0초 만에 (온디바이스)</div>
+        <div class="bg-img">
+          <img src="assets/supertonic3.png" alt="Supertonic 3 Illustration" />
+        </div>
+      </div>
+      <p class="label">E안 — 최신 AI 트렌드 (피드 1:1)</p>
+    </div>
+
+    <div>
+      <div class="card story">
+        <div class="s">
+          <h2>강의 끝에<br />다른 이야기<br />나오는 건<br />이제 그만</h2>
+          <p>6시간 실습 · 소규모 10~20명<br />총 10만원 (미리 공개)</p>
+          <span class="cta">프로필 링크에서 보기</span>
+        </div>
+      </div>
+      <p class="label">스토리/Reels 커버 (9:16)</p>
+    </div>
+  </div>
+</body>
+</html>

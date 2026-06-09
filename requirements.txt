@@ -1,0 +1,11 @@
+google-generativeai
+instagrapi
+pillow
+moviepy
+edge-tts
+fastapi
+uvicorn
+jinja2
+python-multipart
+python-dotenv
+requests

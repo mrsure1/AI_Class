@@ -1,0 +1,17 @@
+# Python 캐시 및 가상환경
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+venv/
+ENV/
+
+# 환경 변수 (민감한 데이터)
+.env
+.env*.local
+
+# 인스타그램 세션 및 출력물
+instagram_session.json
+output/
+test_generation.py

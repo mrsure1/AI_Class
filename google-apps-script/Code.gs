@@ -159,8 +159,64 @@ function doPost(e) {
     sheet.getRange(row, colMap['보유기기']).setValue(String(data.devices || ''));
     sheet.getRange(row, colMap['설문완료']).setValue('Y');
 
+    // ==========================================
+    // [알림 발송] 설문 접수 실시간 메시지 발송
+    // ==========================================
+    var alertText = "🔔 <b>새로운 설문조사 접수 완료!</b>\n\n" +
+                    "👤 이름: " + name + "\n" +
+                    "📞 연락처: " + phone + "\n" +
+                    "💻 컴퓨터 능력: " + String(data.computer || '') + "\n" +
+                    "🤖 AI 경험: " + String(data.aiExperience || '') + "\n" +
+                    "📝 하고 싶은 것: " + String(data.wants || '');
+    
+    // (선택) 활성화할 알림 서비스 주석 해제 후 토큰/URL을 기입하세요.
+    // sendTelegramAlert_(alertText);
+    // sendDiscordAlert_(alertText.replace(/<[^>]*>/g, '')); // Discord용 HTML 태그 제거
+
     return jsonResponse_({ ok: true, message: '설문이 저장되었습니다.', row: row });
   } catch (err) {
     return jsonResponse_({ ok: false, message: err.message || String(err) });
   }
+}
+
+/**
+ * 텔레그램 알림 발송 도우미 함수 (100% 무료, 추천)
+ */
+function sendTelegramAlert_(text) {
+  var token = '여기에_텔레그램_봇_토큰_입력'; // 예: '123456789:ABCdef...'
+  var chatId = '여기에_채팅방_ID_입력';       // 예: '987654321'
+  if (token === '여기에_텔레그램_봇_토큰_입력') return;
+  
+  var url = 'https://api.telegram.org/bot' + token + '/sendMessage';
+  var payload = {
+    'chat_id': chatId,
+    'text': text,
+    'parse_mode': 'HTML'
+  };
+  var options = {
+    'method': 'post',
+    'contentType': 'application/json',
+    'payload': JSON.stringify(payload),
+    'muteHttpExceptions': true
+  };
+  UrlFetchApp.fetch(url, options);
+}
+
+/**
+ * 디스코드 웹훅 알림 발송 도우미 함수 (100% 무료, 추천)
+ */
+function sendDiscordAlert_(text) {
+  var webhookUrl = '여기에_디스코드_웹훅_URL_입력';
+  if (webhookUrl === '여기에_디스코드_웹훅_URL_입력') return;
+
+  var payload = {
+    'content': text
+  };
+  var options = {
+    'method': 'post',
+    'contentType': 'application/json',
+    'payload': JSON.stringify(payload),
+    'muteHttpExceptions': true
+  };
+  UrlFetchApp.fetch(webhookUrl, options);
 }

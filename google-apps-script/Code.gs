@@ -116,14 +116,7 @@ function jsonResponse_(obj) {
 }
 
 function doGet() {
-  // === 진단용: 이 URL을 브라우저에서 열면 텔레그램을 실제로 발송하고 결과를 보여줍니다 ===
-  var result = sendTelegramAlert_('✅ doGet 진단 테스트 — 배포된 웹앱에서 발송됨');
-  return jsonResponse_({
-    ok: true,
-    version: 'v2-telegram-diagnostic',
-    message: 'AI survey endpoint ready',
-    telegram: result
-  });
+  return jsonResponse_({ ok: true, message: 'AI survey endpoint ready' });
 }
 
 function doPost(e) {

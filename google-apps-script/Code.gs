@@ -116,7 +116,14 @@ function jsonResponse_(obj) {
 }
 
 function doGet() {
-  return jsonResponse_({ ok: true, message: 'AI survey endpoint ready' });
+  // === 진단용: 이 URL을 브라우저에서 열면 텔레그램을 실제로 발송하고 결과를 보여줍니다 ===
+  var result = sendTelegramAlert_('✅ doGet 진단 테스트 — 배포된 웹앱에서 발송됨');
+  return jsonResponse_({
+    ok: true,
+    version: 'v2-telegram-diagnostic',
+    message: 'AI survey endpoint ready',
+    telegram: result
+  });
 }
 
 function doPost(e) {
@@ -185,8 +192,10 @@ function doPost(e) {
 function sendTelegramAlert_(text) {
   var token = PropertiesService.getScriptProperties().getProperty('TELEGRAM_TOKEN');
   var chatId = PropertiesService.getScriptProperties().getProperty('TELEGRAM_CHAT_ID');
-  if (!token || !chatId) return;
-  
+  if (!token || !chatId) {
+    return { skipped: true, reason: 'TELEGRAM_TOKEN 또는 TELEGRAM_CHAT_ID 스크립트 속성이 없음', hasToken: !!token, hasChatId: !!chatId };
+  }
+
   var url = 'https://api.telegram.org/bot' + token + '/sendMessage';
   var payload = {
     'chat_id': chatId,
@@ -199,7 +208,12 @@ function sendTelegramAlert_(text) {
     'payload': JSON.stringify(payload),
     'muteHttpExceptions': true
   };
-  UrlFetchApp.fetch(url, options);
+  try {
+    var resp = UrlFetchApp.fetch(url, options);
+    return { skipped: false, status: resp.getResponseCode(), body: resp.getContentText() };
+  } catch (err) {
+    return { skipped: false, error: String(err) };
+  }
 }
 
 /**

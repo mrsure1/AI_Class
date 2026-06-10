@@ -538,6 +538,11 @@
           <input type="text" id="topicInput" class="input-text" placeholder="예: 직장인이 꼭 알아야 할 꿀팁, AI로 10분 만에 작곡하기 등">
         </div>
 
+        <div class="form-group">
+          <label for="keywordsInput">꼭 언급하고 싶은 단어/문장 (선택)</label>
+          <textarea id="keywordsInput" class="input-text" rows="3" placeholder="예: 선착순 10명 마감 임박, 준비물 노트북 필수, 6월 15일 개강 등" style="resize: none; font-family: inherit;"></textarea>
+        </div>
+
         <button id="generateBtn" class="btn">
           <span>✨ 콘텐츠 생성하기</span>
         </button>
@@ -658,6 +663,7 @@
     // 콘텐츠 생성 요청
     document.getElementById('generateBtn').addEventListener('click', async () => {
       const topic = document.getElementById('topicInput').value.trim();
+      const keywords = document.getElementById('keywordsInput').value.trim();
       if (!topic) {
         showToast('❌ 주제를 입력해 주세요.', 'error');
         return;
@@ -669,7 +675,7 @@
         const response = await fetch('/api/generate', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ topic: topic })
+          body: JSON.stringify({ topic: topic, keywords: keywords })
         });
         
         if (!response.ok) {

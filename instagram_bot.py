@@ -46,10 +46,11 @@ def init_gemini():
     genai.configure(api_key=api_key)
     return True
 
-def generate_instagram_content(topic: str, content_type: str = "both"):
+def generate_instagram_content(topic: str, content_type: str = "both", keywords: str = ""):
     """
     주제에 기반하여 인스타그램 피드 및 릴스 대본을 생성합니다.
     content_type: 'feed', 'reels', 또는 'both'
+    keywords: 꼭 포함하고 싶은 핵심 단어 또는 요구사항 문장
     """
     if not init_gemini():
         raise ValueError("Gemini API 초기화 실패. API 키를 확인하세요.")
@@ -65,11 +66,13 @@ def generate_instagram_content(topic: str, content_type: str = "both"):
     
     주제: "{topic}"
     실제 연동되는 프로필 링크 주소 정보: "{profile_link}"
+    추가로 꼭 언급 및 포함할 내용(키워드/문장): "{keywords}"
     
     콘텐츠 생성 가이드:
     1. 피드 본문 캡션(caption)과 릴스 캡션, 릴스 대본(script)의 맨 마지막 행동 유도 문구(CTA)에서는 반드시 사용자가 설정한 프로필 링크 정보("{profile_link}")를 구체적으로 언급해 주세요.
        예: "자세한 설명과 강의 신청은 제 프로필 링크({profile_link})를 클릭해서 확인해보세요!" 또는 "지금 프로필 링크({profile_link})에서 'AI 6시간 과정 신청서'를 접수 중입니다!"
     2. 만약 프로필 링크 정보가 단순히 "프로필 링크"로 넘어왔을 경우에만 주소 없이 "프로필 링크에서 지금 바로 확인해보세요!" 형태로 작성하세요.
+    3. 만약 추가로 언급 및 포함할 내용("{keywords}")이 입력되어 있다면, 해당 단어나 정보들을 문맥에 맞게 매끄럽게 다듬어서 카드뉴스 본문 슬라이드(cards), 피드 본문 캡션, 릴스 대본(script) 중 적절한 위치에 자연스럽게 녹여내어 삽입해 주세요. (가장 실용적이고 실제 정보처럼 매끄럽게 다듬어야 합니다.)
     
     결과는 반드시 아래의 JSON 형식으로만 반환해 주세요. 코드 블록(```json ... ```)을 사용해 주시고, 다른 설명 텍스트는 추가하지 마십시오.
     

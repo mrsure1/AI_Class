@@ -23,6 +23,7 @@ generated_cache = {}
 
 class GenerateRequest(BaseModel):
     topic: str
+    keywords: str = ""
 
 class PublishRequest(BaseModel):
     content_type: str # 'feed' 또는 'reels'
@@ -47,7 +48,7 @@ def api_generate(req: GenerateRequest):
         
     try:
         # 1. AI 콘텐츠 생성
-        content = instagram_bot.generate_instagram_content(req.topic)
+        content = instagram_bot.generate_instagram_content(req.topic, keywords=req.keywords)
         
         # 2. 미디어 파일 생성 (로컬 output 디렉토리에 저장)
         feed_paths = instagram_bot.create_card_news(content["feed"])

@@ -1,4 +1,8 @@
 import os
+import socket
+import webbrowser
+import threading
+import time
 from fastapi import FastAPI, HTTPException, BackgroundTasks
 from fastapi.responses import HTMLResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
@@ -111,8 +115,33 @@ def api_publish(req: PublishRequest):
         instagram_bot.logger.exception("인스타그램 업로드 오류 발생")
         raise HTTPException(status_code=500, detail=f"업로드 실패: {str(e)}")
 
+def find_available_port(host: str, start_port: int) -> int:
+    """사용 가능한 첫 번째 빈 포트를 찾아 반환합니다."""
+    port = start_port
+    while port < 65535:
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            try:
+                s.bind((host, port))
+                return port
+            except OSError:
+                port += 1
+    raise RuntimeError("사용 가능한 빈 포트를 찾을 수 없습니다.")
+
 if __name__ == "__main__":
-    port = int(os.getenv("PORT", 8000))
+    requested_port = int(os.getenv("PORT", 8000))
     host = os.getenv("HOST", "127.0.0.1")
+    
+    # 포트 충돌 자동 감지 및 회피
+    port = find_available_port(host, requested_port)
+    if port != requested_port:
+        print(f"[경고] 요청된 {requested_port} 포트가 이미 사용 중입니다. {port} 포트로 자동 전환하여 실행합니다.")
+    
+    # 웹 브라우저를 지연 실행하여 자동으로 대시보드를 열어줌
+    def auto_open():
+        time.sleep(1.0)
+        webbrowser.open(f"http://{host}:{port}")
+    
+    threading.Thread(target=auto_open, daemon=True).start()
+    
     print(f"인스타그램 자동화 스튜디오 대시보드가 http://{host}:{port} 에서 실행됩니다.")
-    uvicorn.run("dashboard:app", host=host, port=port, reload=True)
+    uvicorn.run(app, host=host, port=port)

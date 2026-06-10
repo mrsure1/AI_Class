@@ -69,11 +69,7 @@ if not exist .env (
     pause
 )
 
-:: 5. 브라우저로 대시보드 자동 열기
-echo [웹 브라우저로 대시보드를 엽니다...]
-start http://127.0.0.1:8000
-
-:: 6. 대시보드 웹 서버 실행
+:: 5. 대시보드 웹 서버 실행 (브라우저는 파이썬 서버 기동 후 자동 열림)
 echo [FastAPI 웹 서버를 가동합니다...]
 python dashboard.py
 if %errorlevel% neq 0 (

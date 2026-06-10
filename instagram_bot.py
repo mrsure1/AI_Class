@@ -54,6 +54,8 @@ def generate_instagram_content(topic: str, content_type: str = "both"):
     if not init_gemini():
         raise ValueError("Gemini API 초기화 실패. API 키를 확인하세요.")
     
+    profile_link = os.getenv("PROFILE_LINK", "프로필 링크")
+    
     # 최신 Gemini 2.5 Flash 모델 사용
     model = genai.GenerativeModel("gemini-2.5-flash")
     
@@ -62,6 +64,12 @@ def generate_instagram_content(topic: str, content_type: str = "both"):
     다음 주제에 대해 인스타그램 게시글과 릴스 콘텐츠를 한 번에 생성해 주세요.
     
     주제: "{topic}"
+    실제 연동되는 프로필 링크 주소 정보: "{profile_link}"
+    
+    콘텐츠 생성 가이드:
+    1. 피드 본문 캡션(caption)과 릴스 캡션, 릴스 대본(script)의 맨 마지막 행동 유도 문구(CTA)에서는 반드시 사용자가 설정한 프로필 링크 정보("{profile_link}")를 구체적으로 언급해 주세요.
+       예: "자세한 설명과 강의 신청은 제 프로필 링크({profile_link})를 클릭해서 확인해보세요!" 또는 "지금 프로필 링크({profile_link})에서 'AI 6시간 과정 신청서'를 접수 중입니다!"
+    2. 만약 프로필 링크 정보가 단순히 "프로필 링크"로 넘어왔을 경우에만 주소 없이 "프로필 링크에서 지금 바로 확인해보세요!" 형태로 작성하세요.
     
     결과는 반드시 아래의 JSON 형식으로만 반환해 주세요. 코드 블록(```json ... ```)을 사용해 주시고, 다른 설명 텍스트는 추가하지 마십시오.
     

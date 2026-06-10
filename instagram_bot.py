@@ -54,8 +54,8 @@ def generate_instagram_content(topic: str, content_type: str = "both"):
     if not init_gemini():
         raise ValueError("Gemini API 초기화 실패. API 키를 확인하세요.")
     
-    # 3.5 flash 또는 1.5 flash 모델 사용
-    model = genai.GenerativeModel("gemini-1.5-flash")
+    # 최신 Gemini 2.5 Flash 모델 사용
+    model = genai.GenerativeModel("gemini-2.5-flash")
     
     prompt = f"""
     당신은 전문적인 인스타그램 크리에이터이자 마케터입니다.

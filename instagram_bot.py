@@ -340,10 +340,10 @@ def get_instagram_client():
     """인스타그램 클라이언트를 초기화하고 로그인을 수행합니다."""
     username = os.getenv("INSTAGRAM_USERNAME")
     password = os.getenv("INSTAGRAM_PASSWORD")
+    two_factor_seed = os.getenv("INSTAGRAM_2FA_SEED")
     
-    if not username or not password:
-        logger.error("INSTAGRAM_USERNAME 또는 INSTAGRAM_PASSWORD가 설정되어 있지 않습니다.")
-        return None
+    if not username or not password or username == "your_instagram_username" or password == "your_instagram_password":
+        raise ValueError("'.env' 파일에 실제 인스타그램 아이디(INSTAGRAM_USERNAME)와 비밀번호(INSTAGRAM_PASSWORD)를 설정해 주세요.")
         
     cl = Client()
     session_file = Path("instagram_session.json")
@@ -356,20 +356,44 @@ def get_instagram_client():
         except Exception as e:
             logger.warning(f"세션 로드 실패, 새로 로그인을 시도합니다: {e}")
             
-    # 로그인 시도
+    # 로그인 상태 체크
+    session_valid = False
     try:
-        # 로그인 상태 체크
         cl.get_timeline_feed()
-        logger.info("이미 인스타그램 세션이 로그인 상태입니다.")
+        logger.info("이미 기존 세션으로 로그인되어 있는 상태입니다.")
+        session_valid = True
     except Exception:
-        logger.info("인스타그램 로그인 시도 중...")
+        logger.info("기존 세션이 만료되어 새로 로그인을 시도합니다.")
+        
+    if not session_valid:
         try:
-            cl.login(username, password)
+            # 2FA 시드가 존재할 경우 OTP 코드 자동 생성 로그인 시도
+            if two_factor_seed:
+                try:
+                    import pyotp
+                    totp = pyotp.TOTP(two_factor_seed.replace(" ", ""))
+                    otp_code = totp.now()
+                    logger.info(f"2단계 인증 OTP 코드를 자동으로 생성하여 로그인합니다: {otp_code}")
+                    cl.login(username, password, verification_code=otp_code)
+                except ImportError:
+                    logger.warning("pyotp 라이브러리가 설치되어 있지 않아 2FA 코드 자동 입력 없이 로그인을 시도합니다.")
+                    cl.login(username, password)
+            else:
+                cl.login(username, password)
+                
             cl.dump_settings(session_file)
             logger.info("인스타그램 로그인 성공 및 세션 저장 완료.")
         except Exception as e:
-            logger.error(f"인스타그램 로그인 실패: {e}")
-            return None
+            err_msg = str(e).lower()
+            if "challenge_required" in err_msg or "checkpoint_required" in err_msg or "challenge" in err_msg:
+                raise ConnectionError(
+                    "인스타그램 로그인 차단(Challenge Required) 발생! 인스타그램 공식 앱을 켜서 '본인 로그인 확인'을 직접 눌러주시거나, "
+                    "또는 계정의 2단계 인증(2FA) 보안 설정을 마친 후 발급받은 백업 시드를 .env의 INSTAGRAM_2FA_SEED에 등록해 주세요."
+                )
+            elif "bad_password" in err_msg or "invalid_user" in err_msg:
+                raise ConnectionError("비밀번호 또는 아이디가 일치하지 않습니다. .env 설정을 다시 확인해 주세요.")
+            else:
+                raise ConnectionError(f"인스타그램 로그인 실패: {e}")
             
     return cl
 

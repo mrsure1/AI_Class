@@ -6,74 +6,67 @@ echo   Instagram AI Auto Studio Launcher
 echo ===================================================
 echo.
 
-:: 1. 파이썬 설치 여부 확인
+:: 1. Check Python Installation
 where python >nul 2>nul
 if %errorlevel% neq 0 (
-    echo [오류] Python이 설치되어 있지 않거나 PATH 환경변수에 등록되지 않았습니다.
-    echo Python 3.9 이상을 설치하고 다시 실행해 주세요.
     echo [ERROR] Python is not installed or not in PATH.
+    echo Please install Python 3.9+ and try again.
     echo.
     pause
     exit /b 1
 )
 
-:: 2. 가상환경 생성
+:: 2. Create Virtual Environment
 if not exist .venv (
-    echo [.venv 가상환경이 없습니다. 새로 생성합니다...]
     echo [.venv virtual environment not found. Creating a new one...]
     python -m venv .venv
     if !errorlevel! neq 0 (
-        echo [오류] 가상환경 생성에 실패했습니다.
         echo [ERROR] Failed to create virtual environment.
         pause
         exit /b 1
     )
 )
 
-:: 3. 가상환경 활성화 및 패키지 설치
-echo [가상환경 활성화 및 패키지 설치 확인 중...]
-echo [Activating virtual environment & Installing dependencies...]
+:: 3. Activate Virtual Environment & Install requirements
+echo [Activating virtual environment...]
 call .venv\Scripts\activate.bat
 if !errorlevel! neq 0 (
-    echo [오류] 가상환경 활성화 실패
     echo [ERROR] Failed to activate virtual environment.
     pause
     exit /b 1
 )
 
-echo [pip 업그레이드 중...]
+echo [Upgrading pip...]
 python -m pip install --upgrade pip >nul 2>&1
 
-echo [requirements.txt 의존성 패키지 설치 중...]
+echo [Installing requirements...]
 pip install -r requirements.txt
 if !errorlevel! neq 0 (
-    echo [오류] 라이브러리 설치 실패. requirements.txt를 확인해 주세요.
     echo [ERROR] Failed to install dependencies.
     pause
     exit /b 1
 )
 
-:: 4. 환경 변수 파일 검사
+:: 4. Check configuration file
 if not exist .env (
     echo.
     echo ===================================================
-    echo   [경고] '.env' 설정 파일이 존재하지 않습니다.
-    echo   '.env.template'을 기반으로 '.env' 파일을 복사합니다.
-    echo   메모장으로 열린 '.env' 파일에 API Key와 인스타 계정을 기입해주세요.
+    echo   [WARNING] '.env' configuration file not found.
+    echo   Copying '.env.template' to '.env'...
+    echo   Please fill in your API Key and credentials in '.env'.
     echo ===================================================
     copy .env.template .env >nul
     
     start notepad.exe .env
     echo.
-    echo [.env 파일을 작성하고 저장한 뒤, 아무 키나 누르면 대시보드가 시작됩니다.]
+    echo [.env file opened in Notepad. Please edit, save, and press any key to continue...]
     pause
 )
 
-:: 5. 대시보드 웹 서버 실행 (브라우저는 파이썬 서버 기동 후 자동 열림)
-echo [FastAPI 웹 서버를 가동합니다...]
+:: 5. Launch Web Server
+echo [Starting FastAPI Web Server...]
 python dashboard.py
 if %errorlevel% neq 0 (
-    echo [오류] 웹 서버 실행 중 오류가 발생했습니다.
     echo [ERROR] Web server crashed.
     pause
     exit /b 1

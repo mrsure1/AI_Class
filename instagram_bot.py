@@ -4,6 +4,7 @@ import time
 import json
 import logging
 import asyncio
+import re
 from pathlib import Path
 from dotenv import load_dotenv
 
@@ -27,6 +28,20 @@ def get_font_path():
         if os.path.exists(font_path):
             return font_path
     return None
+
+def clean_text_for_image(text: str) -> str:
+    """이미지 렌더링 시 깨짐을 방지하기 위해 이모지 및 특수 유니코드 기호를 제거합니다."""
+    if not text:
+        return ""
+    # BMP 바깥의 유니코드 문자(이모지 등) 및 특정 기호 범위 제거
+    # \U00010000-\U0010FFFF : 대부분의 컬러 이모지
+    # \u2600-\u27BF : Miscellaneous Symbols & Dingbats (흑백 이모지, 별, 하트 등)
+    # \u2300-\u23FF : Miscellaneous Technical
+    pattern = re.compile(r'[\U00010000-\U0010FFFF\u2600-\u27BF\u2300-\u23FF]')
+    cleaned = pattern.sub('', text)
+    # 불필요하게 두 번 들어간 공백 제거 및 앞뒤 공백 정리
+    cleaned = re.sub(r' +', ' ', cleaned).strip()
+    return cleaned
 
 # 필요한 폴더 생성
 OUTPUT_DIR = Path("output")
@@ -73,6 +88,7 @@ def generate_instagram_content(topic: str, content_type: str = "both", keywords:
        예: "자세한 설명과 강의 신청은 제 프로필 링크({profile_link})를 클릭해서 확인해보세요!" 또는 "지금 프로필 링크({profile_link})에서 'AI 6시간 과정 신청서'를 접수 중입니다!"
     2. 만약 프로필 링크 정보가 단순히 "프로필 링크"로 넘어왔을 경우에만 주소 없이 "프로필 링크에서 지금 바로 확인해보세요!" 형태로 작성하세요.
     3. 만약 추가로 언급 및 포함할 내용("{keywords}")이 입력되어 있다면, 해당 단어나 정보들을 문맥에 맞게 매끄럽게 다듬어서 카드뉴스 본문 슬라이드(cards), 피드 본문 캡션, 릴스 대본(script) 중 적절한 위치에 자연스럽게 녹여내어 삽입해 주세요. (가장 실용적이고 실제 정보처럼 매끄럽게 다듬어야 합니다.)
+    4. 카드뉴스의 메인 제목("title")과 카드 내용("cards") 리스트에는 어떠한 이모지(Emoji)나 특수 기호도 절대 포함하지 마세요. (이미지 생성 폰트가 이모지를 지원하지 않아 깨지기 때문입니다.) 오직 한글, 영어, 숫자, 기본적인 문장 부호(., !? 등)만 사용해야 합니다. 반면 본문 캡션("caption")에는 이모지를 적극적으로 사용해도 괜찮습니다.
     
     결과는 반드시 아래의 JSON 형식으로만 반환해 주세요. 코드 블록(```json ... ```)을 사용해 주시고, 다른 설명 텍스트는 추가하지 마십시오.
     
@@ -176,8 +192,8 @@ def create_card_news(feed_data: dict):
     footer_font = ImageFont.truetype(font_path, 28)
     
     cards_paths = []
-    title = feed_data["title"]
-    cards = feed_data["cards"]
+    title = clean_text_for_image(feed_data["title"])
+    cards = [clean_text_for_image(c) for c in feed_data["cards"]]
     
     # 테마 색상 (그라데이션 또는 세련된 어두운 배경)
     bg_color = (26, 23, 20)      # Sleek Dark
@@ -271,7 +287,8 @@ def create_reels_video(reels_data: dict):
     draw.rectangle([50, 50, 1030, 1870], outline=(196, 137, 74), width=4)
     if font_path:
         title_font = ImageFont.truetype(font_path, 50)
-        draw.text((540, 300), title, font=title_font, fill=(235, 232, 227), anchor="mm")
+        cleaned_title = clean_text_for_image(title)
+        draw.text((540, 300), cleaned_title, font=title_font, fill=(235, 232, 227), anchor="mm")
         draw.text((540, 1750), "@ai.make.learn", font=ImageFont.truetype(font_path, 30), fill=(90, 143, 110), anchor="mm")
         
     bg_img.save(bg_image_path)
@@ -292,8 +309,9 @@ def create_reels_video(reels_data: dict):
         
         for idx, line in enumerate(script_lines):
             # 자막 텍스트 클립 생성
+            cleaned_line = clean_text_for_image(line)
             txt_clip = TextClip(
-                line, 
+                cleaned_line, 
                 fontsize=40, 
                 color='white', 
                 font=font_path if font_path else 'Arial',

@@ -5,6 +5,8 @@ import json
 import logging
 import asyncio
 import re
+import requests
+import io
 from pathlib import Path
 from dotenv import load_dotenv
 
@@ -46,6 +48,33 @@ def clean_text_for_image(text: str) -> str:
 # 필요한 폴더 생성
 OUTPUT_DIR = Path("output")
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+
+def generate_local_image(prompt: str, seed: int = 42) -> bytes:
+    """로컬 AI 이미지 생성 서버(포트 8000)를 호출하여 이미지를 생성하고 바이너리 데이터를 반환합니다."""
+    url = "http://127.0.0.1:8000/generate"
+    # 512x512 해상도로 생성 요청 (6GB 이하 VRAM을 가진 GPU 환경에서의 OOM 및 JIT 컴파일 락 프리징을 방지하기 위함)
+    payload = {
+        "prompt": prompt,
+        "seed": seed,
+        "steps": 4,
+        "guidance": 1.0,
+        "backend": "bonsai-ternary-gemlite",
+        "width": 512,
+        "height": 512,
+        "tiled_vae": True,
+        "max_sequence_length": None
+    }
+    try:
+        logger.info(f"로컬 AI 이미지 생성 요청 중... 프롬프트: {prompt}")
+        response = requests.post(url, json=payload, timeout=180)
+        if response.status_code == 200:
+            return response.content
+        else:
+            logger.error(f"로컬 AI 이미지 생성 서버 에러 (상태 코드 {response.status_code}): {response.text}")
+            return None
+    except Exception as e:
+        logger.warning(f"로컬 AI 이미지 생성 서버 연결 실패 (서버가 꺼져 있을 수 있음): {e}")
+        return None
 
 # ----------------------------------------------------
 # 1. AI 콘텐츠 생성 모듈 (Gemini API)
@@ -89,6 +118,7 @@ def generate_instagram_content(topic: str, content_type: str = "both", keywords:
     2. 만약 프로필 링크 정보가 단순히 "프로필 링크"로 넘어왔을 경우에만 주소 없이 "프로필 링크에서 지금 바로 확인해보세요!" 형태로 작성하세요.
     3. 만약 추가로 언급 및 포함할 내용("{keywords}")이 입력되어 있다면, 해당 단어나 정보들을 문맥에 맞게 매끄럽게 다듬어서 카드뉴스 본문 슬라이드(cards), 피드 본문 캡션, 릴스 대본(script) 중 적절한 위치에 자연스럽게 녹여내어 삽입해 주세요. (가장 실용적이고 실제 정보처럼 매끄럽게 다듬어야 합니다.)
     4. 카드뉴스의 메인 제목("title")과 카드 내용("cards") 리스트에는 어떠한 이모지(Emoji)나 특수 기호도 절대 포함하지 마세요. (이미지 생성 폰트가 이모지를 지원하지 않아 깨지기 때문입니다.) 오직 한글, 영어, 숫자, 기본적인 문장 부호(., !? 등)만 사용해야 합니다. 반면 본문 캡션("caption")에는 이모지를 적극적으로 사용해도 괜찮습니다.
+    5. 피드의 각 슬라이드 본문 카드에 매핑되는 "image_prompts" 리스트를 꼭 채워주세요. 각 슬라이드의 핵심 메시지나 상황에 맞는 창의적이고 은유적인 3D 렌더링, 테크 스타일, 혹은 모던 미니멀 스타일의 영어 프롬프트(Image Prompt)여야 합니다.
     
     결과는 반드시 아래의 JSON 형식으로만 반환해 주세요. 코드 블록(```json ... ```)을 사용해 주시고, 다른 설명 텍스트는 추가하지 마십시오.
     
@@ -102,6 +132,13 @@ def generate_instagram_content(topic: str, content_type: str = "both", keywords:
           "카드 3 내용 (핵심 정보 2, 2-3문장)",
           "카드 4 내용 (실행 방안/팁, 2-3문장)",
           "카드 5 내용 (마무리 및 행동 유도, 2-3문장)"
+        ],
+        "image_prompts": [
+          "카드 1 본문 내용의 느낌이나 핵심 상황을 비주얼로 표현하는 구체적이고 감각적인 영어 이미지 생성 프롬프트 (예: A futuristic workspace with glowing holographic interfaces, sleek design, highly detailed, 3d render style)",
+          "카드 2 내용에 매칭되는 상세한 영어 이미지 생성 프롬프트",
+          "카드 3 내용에 매칭되는 상세한 영어 이미지 생성 프롬프트",
+          "카드 4 내용에 매칭되는 상세한 영어 이미지 생성 프롬프트",
+          "카드 5 내용에 매칭되는 상세한 영어 이미지 생성 프롬프트"
         ],
         "caption": "인스타그램 업로드용 본문 캡션 (풍부한 이모지와 적절한 줄바꿈 포함)",
         "hashtags": "#태그1 #태그2 #태그3 #태그4 #AI교육"
@@ -194,6 +231,7 @@ def create_card_news(feed_data: dict):
     cards_paths = []
     title = clean_text_for_image(feed_data["title"])
     cards = [clean_text_for_image(c) for c in feed_data["cards"]]
+    image_prompts = feed_data.get("image_prompts", [])
     
     # 테마 색상 (그라데이션 또는 세련된 어두운 배경)
     bg_color = (26, 23, 20)      # Sleek Dark
@@ -230,14 +268,56 @@ def create_card_news(feed_data: dict):
         draw.rectangle([40, 40, 1040, 1040], outline=tag_color, width=3)
         
         # 상단 페이지 번호
-        draw.text((540, 100), f"{idx + 1} / {len(cards)}", font=footer_font, fill=point_color, anchor="mm")
-        
-        # 본문 내용
-        draw_wrapped_text(draw, card_content, body_font, text_color, 850, 380, line_spacing=20)
+        draw.text((540, 90), f"{idx + 1} / {len(cards)}", font=footer_font, fill=point_color, anchor="mm")
         
         # 하단 핸들
-        draw.text((540, 980), "@ai.make.learn", font=footer_font, fill=tag_color, anchor="mm")
+        draw.text((540, 990), "@ai.make.learn", font=footer_font, fill=tag_color, anchor="mm")
         
+        # 이미지 생성 및 배치 시도
+        image_data = None
+        if idx < len(image_prompts) and image_prompts[idx]:
+            # 페이지 인덱스를 활용해 다양한 시드로 생성
+            image_data = generate_local_image(image_prompts[idx], seed=42 + idx)
+            
+        if image_data:
+            try:
+                # 텍스트는 상단에 컴팩트하게 배치 (Y = 180부터 시작)
+                draw_wrapped_text(draw, card_content, body_font, text_color, 850, 180, line_spacing=20)
+                
+                # 512x512 이미지 로드 후 2:1 가로세로 비율로 중앙부(512x256) 크롭 및 900x450 리사이즈 (OOM 방지)
+                ai_img = Image.open(io.BytesIO(image_data))
+                w, h = ai_img.size
+                left = 0
+                top = (h - (w // 2)) // 2
+                right = w
+                bottom = top + (w // 2)
+                ai_img = ai_img.crop((left, top, right, bottom))
+                ai_img = ai_img.resize((900, 450), Image.Resampling.LANCZOS)
+                
+                # 모서리를 둥글게(Radius: 20) 깎기 위해 마스크 생성
+                mask = Image.new("L", ai_img.size, 0)
+                mask_draw = ImageDraw.Draw(mask)
+                mask_draw.rounded_rectangle([(0, 0), ai_img.size], radius=20, fill=255)
+                
+                # 둥근 모서리 마스크 적용
+                rounded_ai_img = ai_img.copy()
+                rounded_ai_img.putalpha(mask)
+                
+                # Y = 480 위치에 중앙 정렬하여 합성 (X = 90)
+                img.paste(rounded_ai_img, (90, 480), rounded_ai_img)
+                
+                # 이미지 둘레 테두리 그리기
+                draw.rounded_rectangle([90, 480, 90 + 900, 480 + 450], radius=20, outline=point_color, width=2)
+                
+                logger.info(f"카드 {idx + 1}에 AI 생성 이미지 합성 성공.")
+            except Exception as img_err:
+                logger.error(f"이미지 합성 오류 발생, 기본 텍스트 레이아웃으로 폴백: {img_err}")
+                image_data = None # 오류 시 폴백 처리
+                
+        if not image_data:
+            # 폴백: 이미지가 없거나 생성에 실패했을 경우 텍스트를 카드 중앙에 배치
+            draw_wrapped_text(draw, card_content, body_font, text_color, 850, 380, line_spacing=20)
+            
         card_path = OUTPUT_DIR / f"card_{idx + 1}.png"
         img.save(card_path)
         cards_paths.append(str(card_path))
